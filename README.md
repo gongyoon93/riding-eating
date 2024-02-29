@@ -43,6 +43,7 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 1. no- unused-vars eslint 에러 > 선언하고 사용하지 않는 변수는 제거로 임시 해결
 
 ### chapter 2 폴더 구조 정리
+![riding-eating_폴더구조](https://github.com/gongyoon93/riding-eating/assets/94844343/ffdfd3aa-2964-452a-8f20-b666c5021776)
 
 ### chapter 3 로그인 화면
 
