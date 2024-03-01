@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { authService } from "@/firebase/fbInstance";
+import { useSetRecoilState } from "recoil";
+import { userState } from "@/lib/atoms/atoms";
 
 // 이메일 유효성 검사 함수
 const validateEmail = (email: string) => {
@@ -29,6 +31,7 @@ export default function SignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const setUser = useSetRecoilState(userState);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -56,15 +59,15 @@ export default function SignIn() {
         formData.email,
         formData.password
       );
-      const user = userCredential.user;
-      console.log(user);
       //웹 앱에서도 저장될 수 있는 방식으로 sessionId(user data) 저장
+      const currentUser = userCredential.user;
+      setUser(currentUser);
+      // setCookie("uid", currentUser.uid, 30);
+      console.log(currentUser);
     } catch (err) {
       console.error("Error fetching user data:", err);
     }
   };
-
-  useEffect(() => {}, []);
 
   return (
     <Container component="main" maxWidth="xs">

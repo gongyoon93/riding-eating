@@ -43,6 +43,7 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 1. no- unused-vars eslint 에러 > 선언하고 사용하지 않는 변수는 제거로 임시 해결
 
 ### chapter 2 폴더 구조 정리
+
 ![riding-eating_폴더구조](https://github.com/gongyoon93/riding-eating/assets/94844343/ffdfd3aa-2964-452a-8f20-b666c5021776)
 
 ### chapter 3 로그인 화면
@@ -51,3 +52,17 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 - firebase의 signInWithEmailAndPassword와 react-query의 useQuery 함께 사용하려고 삽질
 
   > 로그인이나 인증 후에 필요한 데이터를 가져오는 작업(signInWithEmailAndPassword)은 로그인 성공 후에 별도의 요청으로 처리(useQuery)하는 것이 더 적절합니다. 따라서 분리하는 것이 맞다.
+
+firebase의 uid 값을 sessionId로 식별하여 사용하려 하면서 고려해야 할 점
+
+세션 ID를 localStorage에 저장하는 것은 일반적으로 안전하지 않다. localStorage는 JavaScript로 쉽게 접근할 수 있기 때문에, XSS (Cross-Site Scripting) 공격에 취약. 공격자가 악의적인 스크립트를 삽입하여 localStorage에 저장된 세션 ID를 훔쳐갈 수 있다.
+
+세션 스토리지는 브라우저 세션이 유지되는 동안에만 데이터를 저장된다. 브라우저 세션이 종료되면(브라우저를 닫거나 탭을 닫을 때), 세션 스토리지에 저장된 데이터도 자동으로 삭제된다. 이에 따라 뒤로가기를 하거나 새로고침을 해도 세션 스토리지에 저장된 uid값이 삭제됩니다
+
+### chapter 배포
+
+### chapter 운영
+
+### chapter 리팩토링
+
+폴더 구조 정리 및 추상화 필요

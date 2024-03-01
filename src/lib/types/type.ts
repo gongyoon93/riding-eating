@@ -10,3 +10,9 @@ export interface IFetchQueryProps<T> {
   queryKey: Array<string | number | T>;
   queryFn: QueryFunction<UserCredential | T>;
 }
+
+// Atom Interface------------------------------------------------
+
+export interface IAuthState {
+  uid: string;
+}
