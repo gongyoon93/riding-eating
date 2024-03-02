@@ -14,7 +14,8 @@ import Container from "@mui/material/Container";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { authService } from "@/firebase/fbInstance";
 import { useSetRecoilState } from "recoil";
-import { userState } from "@/lib/atoms/atoms";
+import { userState } from "@/atoms/atoms";
+import { useNavigate } from "react-router-dom";
 
 // 이메일 유효성 검사 함수
 const validateEmail = (email: string) => {
@@ -62,7 +63,7 @@ export default function SignIn() {
       //웹 앱에서도 저장될 수 있는 방식으로 sessionId(user data) 저장
       const currentUser = userCredential.user;
       setUser(currentUser);
-      // setCookie("uid", currentUser.uid, 30);
+      localStorage.setItem("uid", currentUser.uid);
       console.log(currentUser);
     } catch (err) {
       console.error("Error fetching user data:", err);

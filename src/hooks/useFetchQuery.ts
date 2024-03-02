@@ -1,4 +1,4 @@
-import { IFetchQueryProps } from "@/lib/types/type";
+import { IFetchQueryProps } from "@/types/type";
 import { useQuery } from "@tanstack/react-query";
 
 export const useFetchQuery = <T>({
