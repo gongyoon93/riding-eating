@@ -1,9 +1,11 @@
 import { Theme } from "@emotion/react";
 
 const color = {
-  black: "#222",
-  primary: "#a1c4fd",
-  gray500: "#555",
+  main: "#FF1E00",
+  second: "#59CE8F",
+  gray: "#d2d2d2",
+  fontMain: "#000000",
+  fontSecond: "#ffffff",
 };
 
 const fontSize = {

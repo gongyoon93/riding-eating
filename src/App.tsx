@@ -1,18 +1,42 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
-import SignUpPage from "./pages/Signup";
-import SignInPage from "./pages/Signin";
-import DashboardPage from "./pages/Dashboard";
+import useSetUserState from "./hooks/useSetUserState";
+import { useRecoilState } from "recoil";
+import { snackbarState } from "./atoms/snackbar";
+import { useEffect } from "react";
+import Routers from "./routes/Routers";
+import Snackbar from "./components/Snackbar/Snackbar";
 
 function App() {
+  const { setUserState } = useSetUserState();
+  const [snackbarQueue, setSnackbarQueue] = useRecoilState(snackbarState);
+
+  useEffect(() => {
+    const isUser = localStorage.getItem("accessState");
+
+    if (isUser) {
+      const { isLogin, uid, email, name } = JSON.parse(isUser);
+      setUserState({ isLogin, uid, email, name });
+    }
+  }, []);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    timer = setTimeout(() => setSnackbarQueue([]), 6000);
+    return () => clearTimeout(timer);
+  }, [snackbarQueue]);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={"/"} element={<DashboardPage />} />
-        <Route path={"/signup"} element={<SignUpPage />} />
-        <Route path={"/signin"} element={<SignInPage />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Snackbar>
+        {snackbarQueue.map(({ id, message, type }) => (
+          <Snackbar.Item key={id} data-set={id} message={message} type={type} />
+        ))}
+      </Snackbar>
+      <BrowserRouter>
+        <Routers />
+      </BrowserRouter>
+    </>
   );
 }
 

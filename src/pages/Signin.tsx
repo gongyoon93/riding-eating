@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,11 +11,9 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { authService } from "@/firebase/fbInstance";
-import { useSetRecoilState } from "recoil";
-import { userState } from "@/atoms/atoms";
+import useSetUserState from "@/hooks/useSetUserState";
 import { useNavigate } from "react-router-dom";
+import useLogin from "@/hooks/useLogin";
 
 // 이메일 유효성 검사 함수
 const validateEmail = (email: string) => {
@@ -32,7 +30,9 @@ export default function SignIn() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const setUser = useSetRecoilState(userState);
+  const { setUserState } = useSetUserState();
+
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -42,7 +42,9 @@ export default function SignIn() {
     });
   };
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+  const { loginUser } = useLogin();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validateEmail(formData.email)) {
       setEmailError(true);
@@ -54,21 +56,20 @@ export default function SignIn() {
       return;
     }
     setPasswordError(false);
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        authService,
-        formData.email,
-        formData.password
-      );
-      //웹 앱에서도 저장될 수 있는 방식으로 sessionId(user data) 저장
-      const currentUser = userCredential.user;
-      setUser(currentUser);
-      localStorage.setItem("uid", currentUser.uid);
-      console.log(currentUser);
-    } catch (err) {
-      console.error("Error fetching user data:", err);
-    }
+    loginUser(formData);
   };
+
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout;
+
+  //   if (isSuccess) {
+  //     timer = setTimeout(() => {
+  //       setUserState((pre) => ({ ...pre, isLogin: true }));
+  //       navigate("/");
+  //     }, 500);
+  //   }
+  //   return () => clearTimeout(timer);
+  // }, [isSuccess, navigate, setUserState]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -87,7 +88,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           로그인
         </Typography>
-        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             type="email"
             margin="normal"
