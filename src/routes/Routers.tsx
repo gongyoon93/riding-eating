@@ -5,7 +5,11 @@ import Layout from "@/layouts/Layout";
 import Dashboard from "@/pages/DashBoard";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
+import SignOut from "@/pages/SignOut";
+import PageNotFound from "@/pages/PageNotFound";
 
+// auth 앞에 '/' 없어도 상위경로 path가 auth이고 하위경로 path가 signin인 경우
+// url에 /auth/signin 이동시 SignIn 컴포넌트를 렌더링함
 const Routers = () => {
   const {
     userStateValue: { isLogin },
@@ -29,8 +33,8 @@ const Routers = () => {
           </Route>
         </Route>
       </Route>
-      {/* <Route path="/logout" element={<Logout />} /> */}
-      {/* <Route path="*" element={<PageNotFound />} /> */}
+      <Route path="/signout" element={<SignOut />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

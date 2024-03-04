@@ -55,13 +55,13 @@ const Header = () => {
         <ul>
           {isLogin && (
             <li>
-              <Link to="/logout">로그아웃</Link>
+              <Link to="/signout">로그아웃</Link>
             </li>
           )}
           {!isLogin && (
             <>
               <li>
-                <Link to="/auth/login">로그인</Link>
+                <Link to="/auth/signin">로그인</Link>
               </li>
               <li>
                 <Link to="/auth/signup">회원가입</Link>

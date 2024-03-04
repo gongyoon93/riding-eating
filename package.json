@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mui/icons-material": "^5.15.11",
     "@tanstack/react-query": "^5.24.1",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.34",

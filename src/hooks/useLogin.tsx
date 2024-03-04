@@ -39,7 +39,7 @@ const useLogin = () => {
         {
           id: Date.now().toString(),
           type: "notice",
-          message: "✅ 다시 돌아오신것을 환영합니다.",
+          message: "✅ 환영합니다.",
         },
       ]);
       setLocalStorage(user.uid, user.email, user.displayName);
