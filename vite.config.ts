@@ -6,13 +6,7 @@ import svgrPlugin from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react({
-      jsxImportSource: "@emotion/react",
-      plugins: [["@swc/plugin-emotion", {}]],
-    }),
-    svgrPlugin(),
-  ],
+  plugins: [react(), svgrPlugin()],
   server: {
     port: 3000,
   },

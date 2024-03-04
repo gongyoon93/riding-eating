@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import useSetUserState from "@/hooks/useSetUserState";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 const Wrapper = styled.header`
   display: flex;
@@ -48,7 +48,7 @@ const Header = () => {
     <Wrapper>
       <LogContainer>
         <h1>
-          <Link to={"/"}>just do it!</Link>
+          <Link to={"/"}>Home</Link>
         </h1>
       </LogContainer>
       <nav>

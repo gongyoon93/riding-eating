@@ -1,5 +1,3 @@
-import { BrowserRouter } from "react-router-dom";
-
 import useSetUserState from "./hooks/useSetUserState";
 import { useRecoilState } from "recoil";
 import { snackbarState } from "./atoms/snackbar";
@@ -21,8 +19,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    timer = setTimeout(() => setSnackbarQueue([]), 6000);
+    const timer = setTimeout(
+      () => setSnackbarQueue([]),
+      6000
+    ) as NodeJS.Timeout;
     return () => clearTimeout(timer);
   }, [snackbarQueue]);
 
@@ -33,9 +33,7 @@ function App() {
           <Snackbar.Item key={id} data-set={id} message={message} type={type} />
         ))}
       </Snackbar>
-      <BrowserRouter>
-        <Routers />
-      </BrowserRouter>
+      <Routers />
     </>
   );
 }

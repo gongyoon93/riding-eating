@@ -4,8 +4,8 @@ interface UserState {
   isLogin: boolean;
   uid: string;
   token?: string;
-  email: string;
-  name: string;
+  email: string | null;
+  name: string | null;
 }
 
 export const userState = atom<UserState>({

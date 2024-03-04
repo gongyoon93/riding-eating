@@ -4,7 +4,11 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 const useSetUserState = () => {
   const setUserState = useSetRecoilState(userState);
   const userStateValue = useRecoilValue(userState);
-  const setLocalStorage = (uid: string, email: string, name: string) => {
+  const setLocalStorage = (
+    uid: string,
+    email: string | null,
+    name: string | null
+  ) => {
     const userState = {
       isLogin: true,
       uid,
