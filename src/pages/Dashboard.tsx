@@ -15,7 +15,7 @@ const MapContainer = styled.article`
 function Dashboard() {
   return (
     <DashBoardContainer>
-      <MapContainer>대시보드</MapContainer>
+      <MapContainer></MapContainer>
       <Footer />
     </DashBoardContainer>
   );

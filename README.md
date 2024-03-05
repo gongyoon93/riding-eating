@@ -1,19 +1,15 @@
 ## 프로젝트 설명
 
-자전거 라이딩을 하다 보관소나 대여소에 보관이나 반납을 하고 주변 맛집을 추천해주는 서비스
+걷기 코스를 공유해서 추천하고 주변 맛집을 추천해주는 서비스
 
-1. 자전거 도로를 안내해준다(지도상에 길을 보여주거나 표시할 방법을 찾아야함) https://www.data.go.kr/data/15057099/openapi.do 오픈 api 이용
+1. 걷기 코스 경로를 저장
 2. 마커를 찍을 경우 인근 주변의 맛집 리스트를 보여줄 수 있는 리스트 기능 등(intersectionObserver 무한 스크롤, open api)
-3. 따릉이 대여소(open api) 추가 여부 고민
 
 ## 기능 및 기술 설명
 
 이 서비스를 GPS가 필요한 모바일 웹 방향으로 갈지 웹서비스로 기능을 제한해서 개발하는 방향으로 갈지 결정해야 됨
 
 - 웹앱 방향으로 계획 중
-
-자전거 이동 경로 실시간 추적 기록 : Firebase의 Realtime Database로 위치 기록 서비스와 통합
-
 - 기술 스택 : react + typescript + react-query + recoil + swc + vite + firebase + styled-components
 
 ### chapter 1 설정
