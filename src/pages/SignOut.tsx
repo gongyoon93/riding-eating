@@ -24,14 +24,14 @@ const SignOut = () => {
       removeLocalStorage();
       setUserState({ isLogin: false, uid: "", email: null, name: null });
       navigate("/");
-    }, 2000) as NodeJS.Timeout;
+    }, 1000) as NodeJS.Timeout;
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <Wrapper>
-      <h1>🤣 안녕히가세요!</h1>
+      <h1>✨ 안녕히가세요!</h1>
     </Wrapper>
   );
 };

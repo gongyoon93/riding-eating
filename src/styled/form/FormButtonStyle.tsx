@@ -18,9 +18,9 @@ export const buttonDisabled = css`
 `;
 
 export const buttonAbled = css`
-  color: ${({ theme }) => theme.color.main};
+  color: ${({ theme }) => theme.color.second};
   font-weight: 900;
-  border: 1px solid ${({ theme }) => theme.color.main};
+  border: 1px solid ${({ theme }) => theme.color.second};
   &:not(:hover) {
     transition:
       color 0.8s,
@@ -29,12 +29,12 @@ export const buttonAbled = css`
   }
   &:hover {
     color: ${({ theme }) => theme.color.fontSecond};
-    border: 1px solid ${({ theme }) => theme.color.main};
-    background-color: ${({ theme }) => theme.color.main};
+    border: 1px solid ${({ theme }) => theme.color.second};
+    background-color: ${({ theme }) => theme.color.second};
   }
   &:active {
     color: ${({ theme }) => theme.color.main};
-    border: 1px solid ${({ theme }) => theme.color.main};
+    border: 1px solid ${({ theme }) => theme.color.second};
     background-color: unset;
   }
 `;

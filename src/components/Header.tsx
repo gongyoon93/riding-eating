@@ -3,10 +3,14 @@ import useSetUserState from "@/hooks/useSetUserState";
 import styled from "styled-components";
 
 const Wrapper = styled.header`
+  position: sticky;
   display: flex;
-  padding: 0.8rem;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid transparent;
+  z-index: 1031;
+  width: calc(100% - 30px);
+  padding: 25px 15px 15px;
   nav {
     ul {
       display: flex;
@@ -19,7 +23,7 @@ const Wrapper = styled.header`
           text-decoration: none;
           color: ${({ theme }) => theme.color.fontMain};
           &:hover {
-            color: ${({ theme }) => theme.color.main};
+            color: ${({ theme }) => theme.color.second};
             font-weight: bolder;
           }
         }
@@ -29,12 +33,13 @@ const Wrapper = styled.header`
 `;
 
 const LogContainer = styled.div`
-  h1 {
-    a {
+  a {
+    h1 {
       text-decoration: unset;
-      font-size: 1.5rem;
+      font-size: 2.5rem;
       font-weight: bolder;
-      color: ${({ theme }) => theme.color.main};
+      color: ${({ theme }) => theme.color.second};
+      padding-bottom: 5px;
     }
   }
 `;
@@ -47,17 +52,17 @@ const Header = () => {
   return (
     <Wrapper>
       <LogContainer>
-        <h1>
-          <Link to={"/"}>Home</Link>
-        </h1>
+        <Link to={"/"}>
+          <h1>🚲</h1>
+        </Link>
       </LogContainer>
       <nav>
         <ul>
-          {isLogin && (
+          {/* {isLogin && (
             <li>
               <Link to="/signout">로그아웃</Link>
             </li>
-          )}
+          )} */}
           {!isLogin && (
             <>
               <li>
