@@ -8,4 +8,6 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_SENDER_ID?: string;
   readonly VITE_FIREBASE_APP_ID: string;
   readonly VITE_FIREBASE_MEASUREMENT_ID?: string;
+  readonly VITE_MAPS_API_KEY: string;
+  readonly VITE_MAPS_CLIENT_ID: string;
 }
