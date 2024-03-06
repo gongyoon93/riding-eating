@@ -1,30 +1,66 @@
+import useMapsState from "@/hooks/useMapsState";
+import useSetPositionState from "@/hooks/useSetPositionState";
+import { useEffect } from "react";
 import {
-  Container as MapDiv,
-  NaverMap,
-  Marker,
-  useNavermaps,
-} from "react-naver-maps";
+  Map as MapView,
+  MapMarker,
+  useKakaoLoader,
+} from "react-kakao-maps-sdk";
+import styled, { keyframes } from "styled-components";
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const StyledMarker = styled.div`
+  font-size: 1.5em;
+  color: #000;
+  animation: ${blinkAnimation} 1s linear infinite;
+`;
 
 function Map() {
-  // instead of window.naver.maps
-  const navermaps = useNavermaps();
+  const { positionStateValue } = useSetPositionState();
+  const [loading, error] = useKakaoLoader({
+    appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
+  });
+
+  const { getCurrentPosition } = useMapsState();
+
+  useEffect(() => {
+    if (!loading) {
+      console.log("loaded");
+      getCurrentPosition();
+    }
+    if (error) {
+      console.log(error);
+    }
+  }, [loading, error]);
+
   return (
-    <MapDiv
+    //Map 내부에서 loading 상태를 관찰 > conditional rendering 필요 x.
+    <MapView
+      center={{ lat: positionStateValue.lat, lng: positionStateValue.lng }}
       style={{
         width: "100%",
         flex: 1,
         backgroundColor: "#f0f0f0",
       }}
+      level={3}
     >
-      <NaverMap
-        defaultCenter={new navermaps.LatLng(37.3595704, 127.105399)}
-        defaultZoom={15}
+      <MapMarker
+        position={{ lat: positionStateValue.lat, lng: positionStateValue.lng }}
       >
-        <Marker
-          defaultPosition={new navermaps.LatLng(37.3595704, 127.105399)}
-        />
-      </NaverMap>
-    </MapDiv>
+        <StyledMarker>현재 위치</StyledMarker>
+      </MapMarker>
+    </MapView>
   );
 }
 

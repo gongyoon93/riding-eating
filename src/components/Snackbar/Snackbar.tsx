@@ -64,12 +64,12 @@ const MessageContainer = styled.div<{ type: "notice" | "warning" | "caution" }>`
     }};
     animation: ${snackbarTimerKeyframe} 3.3s 1 linear;
     content: "";
-    z-index: 0;
+    z-index: 2031;
   }
   h1 {
     position: relative;
     font-size: 1.5rem;
-    z-index: 2;
+    z-index: 2032;
   }
 `;
 

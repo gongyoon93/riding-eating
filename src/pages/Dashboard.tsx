@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer";
 import Map from "@/components/Map";
-import { NavermapsProvider } from "react-naver-maps";
 import styled from "styled-components";
 
 const DashBoardContainer = styled.section`
@@ -11,12 +10,10 @@ const DashBoardContainer = styled.section`
 
 function Dashboard() {
   return (
-    <NavermapsProvider ncpClientId={import.meta.env.VITE_MAPS_CLIENT_ID}>
-      <DashBoardContainer>
-        <Map />
-        <Footer />
-      </DashBoardContainer>
-    </NavermapsProvider>
+    <DashBoardContainer>
+      <Map />
+      <Footer />
+    </DashBoardContainer>
   );
 }
 

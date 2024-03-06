@@ -10,7 +10,7 @@ const TabBar = styled.footer`
   left: 0;
   width: 100%;
   color: #ffffff;
-
+  z-index: 1031;
   ul {
     width: 100%;
     display: flex;
@@ -23,6 +23,10 @@ const TabBar = styled.footer`
       font-size: 1.5rem;
       font-weight: bolder;
       color: ${({ theme }) => theme.color.fontSecond};
+      border-right: 1px solid #ffffff;
+      &:last-child {
+        border-right: none;
+      }
     }
   }
 
@@ -42,6 +46,7 @@ const Footer = () => {
   return (
     <TabBar>
       <ul>
+        <li>기록 시작</li>
         {isLogin && <li onClick={() => navigate("/signout")}>로그아웃</li>}
       </ul>
     </TabBar>
