@@ -36,8 +36,6 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 
 ### chapter 2 폴더 구조 정리
 
-![riding-eating_폴더구조](https://github.com/gongyoon93/riding-eating/assets/94844343/ffdfd3aa-2964-452a-8f20-b666c5021776)
-
 ### chapter 3 구현
 
 - 로그인 화면(~24.03.04)
@@ -94,6 +92,10 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 
 - Maps Geolocation API 요금 문제로 인해 NAVER에서 KAKAO 오픈 API로 변경(24.03.06)
 - react -kakao-maps-sdk libarary : 기능 구현에 집중 할 수 있도록 KakaoMap과 React Life Cycle을 연결하여 제공, Component와 hook을 활용, Typescript의 타입 추론 > 사용 결정(24.03.06)
+- 현재 위치에 마커(커스텀 오버레이) 띄우기, useMaps와 useSetMapsState 정리, 기록 시작 event 함수 (24.03.07)
+- ! Error Issue
+  - React does not recognize the `isMoving` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `ismoving` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+    >
 
 ### chapter 4 배포
 

@@ -1,5 +1,7 @@
 import Footer from "@/components/Footer";
 import Map from "@/components/Map";
+import useSetMapsState from "@/hooks/useSetMapsState";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const DashBoardContainer = styled.section`
@@ -9,6 +11,16 @@ const DashBoardContainer = styled.section`
 `;
 
 function Dashboard() {
+  const { setIsMovingState } = useSetMapsState();
+
+  useEffect(() => {
+    const isMovingState = localStorage.getItem("movingState");
+    if (isMovingState) {
+      const isMoving = JSON.parse(isMovingState).isMoving === true;
+      setIsMovingState({ isMoving });
+    }
+  }, []);
+
   return (
     <DashBoardContainer>
       <Map />

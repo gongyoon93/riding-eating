@@ -1,12 +1,14 @@
-import useMapsState from "@/hooks/useMapsState";
-import useSetPositionState from "@/hooks/useSetPositionState";
+import useMaps from "@/hooks/useMaps";
+import useSetMapsState from "@/hooks/useSetMapsState";
 import { useEffect } from "react";
 import {
   Map as MapView,
-  MapMarker,
   useKakaoLoader,
+  CustomOverlayMap,
 } from "react-kakao-maps-sdk";
 import styled, { keyframes } from "styled-components";
+import markerGreen from "@/assets/images/marker_green.png";
+import markerRed from "@/assets/images/marker_red.png";
 
 const blinkAnimation = keyframes`
   0% {
@@ -20,19 +22,28 @@ const blinkAnimation = keyframes`
   }
 `;
 
-const StyledMarker = styled.div`
+const StyledMarker = styled.div<{ isMoving: boolean }>`
   font-size: 1.5em;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: ${(props) =>
+      props.isMoving ? `url(${markerRed})` : `url(${markerGreen})`}
+    transparent;
   color: #000;
   animation: ${blinkAnimation} 1s linear infinite;
 `;
 
 function Map() {
-  const { positionStateValue } = useSetPositionState();
+  const {
+    positionStateValue,
+    isMovingStateValue: { isMoving },
+  } = useSetMapsState();
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
   });
 
-  const { getCurrentPosition } = useMapsState();
+  const { getCurrentPosition } = useMaps();
 
   useEffect(() => {
     if (!loading) {
@@ -55,11 +66,13 @@ function Map() {
       }}
       level={3}
     >
-      <MapMarker
+      <CustomOverlayMap
         position={{ lat: positionStateValue.lat, lng: positionStateValue.lng }}
+        xAnchor={0.7}
+        yAnchor={0.8}
       >
-        <StyledMarker>현재 위치</StyledMarker>
-      </MapMarker>
+        <StyledMarker isMoving={isMoving} />
+      </CustomOverlayMap>
     </MapView>
   );
 }

@@ -12,3 +12,10 @@ export const positionState = atom<PositionState>({
     lng: 127.105399,
   },
 });
+
+export const movingState = atom<{ isMoving: boolean }>({
+  key: "movingState",
+  default: {
+    isMoving: false,
+  },
+});
