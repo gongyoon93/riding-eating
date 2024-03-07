@@ -36,6 +36,8 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 
 ### chapter 2 폴더 구조 정리
 
+![riding-eating_폴더구조2](https://github.com/gongyoon93/riding-eating/assets/94844343/60472615-5f6f-418a-a981-6388d201d836)
+
 ### chapter 3 구현
 
 - 로그인 화면(~24.03.04)
