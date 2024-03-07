@@ -37,7 +37,7 @@ const StyledMarker = styled.div<{ isMoving: boolean }>`
 function Map() {
   const {
     positionStateValue,
-    isMovingStateValue: { isMoving },
+    movingStateValue: { isMoving },
   } = useSetMapsState();
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY

@@ -1,3 +1,4 @@
+import useRemoveMapsState from "@/hooks/useRemoveMapsState";
 import useRemoveUserState from "@/hooks/useRemoveUserState";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,11 +19,25 @@ const Wrapper = styled.div`
 const SignOut = () => {
   const navigate = useNavigate();
   const { removeLocalStorage, setUserState } = useRemoveUserState();
+  const {
+    setMovingState,
+    removeMovingStorage,
+    setPositionState,
+    removePositionStorage,
+  } = useRemoveMapsState();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      removeLocalStorage();
+      // removeLocalStorage();
+      // removeMovingStorage();
+      // removePositionStorage();
+      localStorage.clear();
       setUserState({ isLogin: false, uid: "", email: null, name: null });
+      setMovingState({ isMoving: false });
+      setPositionState({
+        lat: 0,
+        lng: 0,
+      });
       navigate("/");
     }, 1000) as NodeJS.Timeout;
 

@@ -1,3 +1,4 @@
+import useMaps from "@/hooks/useMaps";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import useSetUserState from "@/hooks/useSetUserState";
 import { useNavigate } from "react-router-dom";
@@ -50,13 +51,10 @@ const Footer = () => {
   } = useSetUserState();
 
   const {
-    isMovingStateValue: { isMoving },
-    setIsMovingState,
+    movingStateValue: { isMoving },
   } = useSetMapsState();
 
-  const changeMovingState = () => {
-    setIsMovingState({ isMoving: !isMoving });
-  };
+  const { changeMovingState } = useMaps();
 
   return (
     <TabBar isMoving={isMoving}>

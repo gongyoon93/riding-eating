@@ -11,11 +11,11 @@ const useSetMapsState = () => {
     };
     localStorage.setItem("currentPositionState", JSON.stringify(positionState));
   };
-  const setIsMovingState = useSetRecoilState(movingState);
-  const isMovingStateValue = useRecoilValue(movingState);
+  const setMovingState = useSetRecoilState(movingState);
+  const movingStateValue = useRecoilValue(movingState);
   const setMovingStorage = (isMoving: boolean) => {
     const movingState = {
-      isMoving,
+      isMoving: !isMoving,
     };
     localStorage.setItem("movingState", JSON.stringify(movingState));
   };
@@ -23,8 +23,8 @@ const useSetMapsState = () => {
     setCurrentPositionStorage,
     setPositionState,
     positionStateValue,
-    setIsMovingState,
-    isMovingStateValue,
+    setMovingState,
+    movingStateValue,
     setMovingStorage,
   };
 };

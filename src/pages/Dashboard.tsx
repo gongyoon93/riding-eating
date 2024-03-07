@@ -11,13 +11,13 @@ const DashBoardContainer = styled.section`
 `;
 
 function Dashboard() {
-  const { setIsMovingState } = useSetMapsState();
+  const { setMovingState } = useSetMapsState();
 
   useEffect(() => {
     const isMovingState = localStorage.getItem("movingState");
     if (isMovingState) {
       const isMoving = JSON.parse(isMovingState).isMoving === true;
-      setIsMovingState({ isMoving });
+      setMovingState((pre) => ({ ...pre, isMoving }));
     }
   }, []);
 
