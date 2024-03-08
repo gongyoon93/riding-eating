@@ -32,9 +32,13 @@ const useMaps = () => {
       (position) => {
         console.log(Math.random());
         const { latitude, longitude } = position.coords;
+        //거리 25m 이동시 저장
+
         setPositionState({ lat: latitude, lng: longitude });
-        setWatchStorage(watchId);
-        setWatchState({ watchId });
+        if (watchId === 0) {
+          setWatchStorage(watchId);
+          setWatchState({ watchId });
+        }
       },
       (error) => {
         console.error("Error getting user's location:", error);
