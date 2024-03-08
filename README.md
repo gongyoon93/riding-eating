@@ -1,9 +1,8 @@
 ## 프로젝트 설명
+
 걷기 코스를 기록해 공유하고 추천 받을 수 있는 Web App Project
 
 ## 기능 및 기술 설명
-
-이 서비스를 GPS가 필요한 모바일 웹 방향으로 갈지 웹서비스로 기능을 제한해서 개발하는 방향으로 갈지 결정해야 됨
 
 - 웹앱 방향으로 계획 중
 - 기술 스택 : react + typescript + react-query + recoil + swc + vite + firebase + styled-components
@@ -37,35 +36,26 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 ### chapter 3 구현
 
 - 로그인 화면(~24.03.04)
-
   - react - hook - form 라이브러리 없이 formData 관리 및 유효성 검사 구현
-
 - firebase의 uid 값을 sessionId로 식별하여 사용하려 하면서 고려해야 할 점
-  
   - 세션 ID를 localStorage에 저장하는 것은 일반적으로 안전하지 않다. localStorage는 JavaScript로 쉽게 접근할 수 있기 때문에, XSS (Cross-Site Scripting) 공격에 취약. 공격자가 악의적인 스크립트를 삽입하여 localStorage에 저장된 세션 ID를 훔쳐갈 수 있다.
-
   - 세션 스토리지는 브라우저 세션이 유지되는 동안에만 데이터를 저장된다. 브라우저 세션이 종료되면(브라우저를 닫거나 탭을 닫을 때), 세션 스토리지에 저장된 데이터도 자동으로 삭제된다. 이에 따라 뒤로가기를 하거나 새로고침을 해도 세션 스토리지에 저장된 uid값이 삭제됩니다
-
 - 지도 위의 이동 경로를 저장하는 방법(24.03.05)
-
-1. **Client Side (클라이언트 측)**
-   - **장점**:
-     - 사용자의 브라우저 내에서 데이터를 직접 처리하므로 속도가 빠를 수 있습니다.
-     - 사용자의 프라이버시를 보다 존중할 수 있습니다.
-   - **단점**:
-     - 사용자의 장치에 데이터가 저장되므로 보안에 취약할 수 있습니다.
-     - 로컬 스토리지의 용량 제한이 있을 수 있으며, 많은 양의 데이터를 처리하기 어려울 수 있습니다.
-2. **Server Side (서버 측)**
-
-   - **장점**:
-     - 서버 측에서 데이터를 처리하고 저장하므로 데이터 보안이 보다 용이합니다.
-     - 대용량 데이터를 처리하고 분석하는 데 효과적입니다.
-   - **단점**:
-     - 클라이언트와의 통신이 필요하므로 속도가 상대적으로 느릴 수 있습니다.
-     - 서버 측에서 사용자의 위치 정보를 관리할 때 보안과 개인 정보 보호에 대한 책임이 더욱 큽니다.
-
-   이 정보들을 종합해 일정 기간이나 일정 거리의 데이터가 쌓일 때마다 데이터를 서버로 전송하여 부분적으로 전송하여 보관
-
+  1. **Client Side (클라이언트 측)**
+     - **장점**:
+       - 사용자의 브라우저 내에서 데이터를 직접 처리하므로 속도가 빠를 수 있습니다.
+       - 사용자의 프라이버시를 보다 존중할 수 있습니다.
+     - **단점**:
+       - 사용자의 장치에 데이터가 저장되므로 보안에 취약할 수 있습니다.
+       - 로컬 스토리지의 용량 제한이 있을 수 있으며, 많은 양의 데이터를 처리하기 어려울 수 있습니다.
+  2. **Server Side (서버 측)**
+     - **장점**:
+       - 서버 측에서 데이터를 처리하고 저장하므로 데이터 보안이 보다 용이합니다.
+       - 대용량 데이터를 처리하고 분석하는 데 효과적입니다.
+     - **단점**:
+       - 클라이언트와의 통신이 필요하므로 속도가 상대적으로 느릴 수 있습니다.
+       - 서버 측에서 사용자의 위치 정보를 관리할 때 보안과 개인 정보 보호에 대한 책임이 더욱 큽니다.
+     - 일정 기간이나 일정 거리의 데이터가 쌓일 때마다 데이터를 서버로 전송하여 부분적으로 전송하여 보관
 - 메인 기능의 구현 계획(24.03.06)
 
 1. **메인 화면 구성**:
@@ -89,8 +79,14 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 - react -kakao-maps-sdk libarary : 기능 구현에 집중 할 수 있도록 KakaoMap과 React Life Cycle을 연결하여 제공, Component와 hook을 활용, Typescript의 타입 추론 > 사용 결정(24.03.06)
 - 현재 위치에 마커(커스텀 오버레이) 띄우기, useMaps와 useSetMapsState 정리, 기록 시작 event 함수 (24.03.07)
 - ! Error Issue
-  - React does not recognize the `isMoving` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `ismoving` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
-    >
+  - React does not recognize the `isMoving` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `ismoving` instead. If you accidentally passed it from a parent component, remove it from the DOM element. (24.03.07)
+    -
+- 비지니스 로직 / View / 상태 관리 분리
+  - 아래와 같이 폴더 별로 분리
+  1. **hooks 폴더**: 비즈니스 로직을 작성하는 곳. 핵심 기능 및 데이터 처리, 상태 관리를 담는 코드를 작성한다. 이 추상화된 로직(hooks)들은 재사용 컴포넌트와 page 컴포넌트에서 재사용 될 수 있다.
+  2. **components 폴더**: 재사용 가능한 UI 요소들을 작성하고, props를 통해 데이터를 전달 받아 화면에 표시. 비즈니스 로직을 포함하지 않으며, hooks 폴더에서 작성된 hooks를 사용하여 데이터나 함수를 가져오거나 바인딩.
+  3. **pages 폴더**: 각 페이지에 대한 뷰와 페이지 전용의 useEffect hook을 사용하여 페이지 진입 및 dependency에 따라 필요한 작업을 수행할 수 있게 하는 곳. 필요에 따라 hooks를 가져와 사용한다.
+  - **components/Maps.tsx 와 pages/DashBoard.tsx로 분리하였지만 Maps.tsx가 재사용 UI가 아닌 Page 컴포넌트에 가깝고 useEffect hook으로 페이지 진입, dependency 의존해 작업 수행하는 코드 위주이므로 pages/Map.tsx로 변경, components의 파일도 필요에 따라 hooks를 가져와 사용할 수 있다는 점도 이해(24.03.08)**
 
 ### chapter 4 배포
 
