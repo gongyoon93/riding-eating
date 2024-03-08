@@ -6,7 +6,7 @@ const useMaps = () => {
   const { setPositionState, setWatchState, setWatchStorage } =
     useSetMapsState();
   const getCurrentPosition = () => {
-    // 사용자의 현재 위치를 가져와서 상태에 설정합니다.
+    // 사용자의 현재 위치를 가져와 상태에 설정
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -30,15 +30,16 @@ const useMaps = () => {
     //watchId:0 값으로 기록 중 중지 여부를 확인
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
-        console.log(Math.random());
-        const { latitude, longitude } = position.coords;
-        //거리 25m 이동시 저장
-
-        setPositionState({ lat: latitude, lng: longitude });
+        // console.log(Math.random());
         if (watchId === 0) {
           setWatchStorage(watchId);
           setWatchState({ watchId });
         }
+        const { latitude, longitude } = position.coords;
+
+        //거리 25m 이동시 저장
+
+        setPositionState({ lat: latitude, lng: longitude });
       },
       (error) => {
         console.error("Error getting user's location:", error);
@@ -47,7 +48,7 @@ const useMaps = () => {
   };
   const clearWatch = (watchId: number) => {
     navigator.geolocation.clearWatch(watchId);
-    console.log("clear Watch");
+    // console.log("clear Watch");
     setWatchStorage(0);
     setWatchState({ watchId: 0 });
   };
