@@ -1,10 +1,10 @@
-import { movingState, positionState } from "@/atoms/maps";
+import { positionState, watchState } from "@/atoms/maps";
 import { useSetRecoilState } from "recoil";
 
 const useRemoveMapsState = () => {
-  const setMovingState = useSetRecoilState(movingState);
-  const removeMovingStorage = () => {
-    localStorage.removeItem("movingState");
+  const setWatchState = useSetRecoilState(watchState);
+  const removeWatchStorage = () => {
+    localStorage.removeItem("watchState");
   };
 
   const setPositionState = useSetRecoilState(positionState);
@@ -13,8 +13,8 @@ const useRemoveMapsState = () => {
   };
 
   return {
-    setMovingState,
-    removeMovingStorage,
+    setWatchState,
+    removeWatchStorage,
     setPositionState,
     removePositionStorage,
   };

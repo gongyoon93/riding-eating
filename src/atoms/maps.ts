@@ -13,9 +13,9 @@ export const positionState = atom<PositionState>({
   },
 });
 
-export const movingState = atom<{ isMoving: boolean }>({
-  key: "movingState",
+export const watchState = atom<{ watchId: number }>({
+  key: "watchState",
   default: {
-    isMoving: false,
+    watchId: 0,
   },
 });

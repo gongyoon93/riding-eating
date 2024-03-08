@@ -1,4 +1,4 @@
-import { movingState, positionState } from "@/atoms/maps";
+import { positionState, watchState } from "@/atoms/maps";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 const useSetMapsState = () => {
@@ -11,21 +11,21 @@ const useSetMapsState = () => {
     };
     localStorage.setItem("currentPositionState", JSON.stringify(positionState));
   };
-  const setMovingState = useSetRecoilState(movingState);
-  const movingStateValue = useRecoilValue(movingState);
-  const setMovingStorage = (isMoving: boolean) => {
-    const movingState = {
-      isMoving: !isMoving,
+  const setWatchState = useSetRecoilState(watchState);
+  const watchStateValue = useRecoilValue(watchState);
+  const setWatchStorage = (watchId: number) => {
+    const watchState = {
+      watchId,
     };
-    localStorage.setItem("movingState", JSON.stringify(movingState));
+    localStorage.setItem("watchState", JSON.stringify(watchState));
   };
   return {
     setCurrentPositionStorage,
     setPositionState,
     positionStateValue,
-    setMovingState,
-    movingStateValue,
-    setMovingStorage,
+    setWatchState,
+    watchStateValue,
+    setWatchStorage,
   };
 };
 

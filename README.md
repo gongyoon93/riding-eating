@@ -78,15 +78,30 @@ vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경�
 - Maps Geolocation API 요금 문제로 인해 NAVER에서 KAKAO 오픈 API로 변경(24.03.06)
 - react -kakao-maps-sdk libarary : 기능 구현에 집중 할 수 있도록 KakaoMap과 React Life Cycle을 연결하여 제공, Component와 hook을 활용, Typescript의 타입 추론 > 사용 결정(24.03.06)
 - 현재 위치에 마커(커스텀 오버레이) 띄우기, useMaps와 useSetMapsState 정리, 기록 시작 event 함수 (24.03.07)
-- ! Error Issue
-  - React does not recognize the `isMoving` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `ismoving` instead. If you accidentally passed it from a parent component, remove it from the DOM element. (24.03.07)
-    -
+- !Error Issue
+  - ## React does not recognize the `isMoving` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `ismoving` instead. If you accidentally passed it from a parent component, remove it from the DOM element. (24.03.07)
 - 비지니스 로직 / View / 상태 관리 분리
+
   - 아래와 같이 폴더 별로 분리
+
   1. **hooks 폴더**: 비즈니스 로직을 작성하는 곳. 핵심 기능 및 데이터 처리, 상태 관리를 담는 코드를 작성한다. 이 추상화된 로직(hooks)들은 재사용 컴포넌트와 page 컴포넌트에서 재사용 될 수 있다.
   2. **components 폴더**: 재사용 가능한 UI 요소들을 작성하고, props를 통해 데이터를 전달 받아 화면에 표시. 비즈니스 로직을 포함하지 않으며, hooks 폴더에서 작성된 hooks를 사용하여 데이터나 함수를 가져오거나 바인딩.
   3. **pages 폴더**: 각 페이지에 대한 뷰와 페이지 전용의 useEffect hook을 사용하여 페이지 진입 및 dependency에 따라 필요한 작업을 수행할 수 있게 하는 곳. 필요에 따라 hooks를 가져와 사용한다.
+
   - **components/Maps.tsx 와 pages/DashBoard.tsx로 분리하였지만 Maps.tsx가 재사용 UI가 아닌 Page 컴포넌트에 가깝고 useEffect hook으로 페이지 진입, dependency 의존해 작업 수행하는 코드 위주이므로 pages/Map.tsx로 변경, components의 파일도 필요에 따라 hooks를 가져와 사용할 수 있다는 점도 이해(24.03.08)**
+
+- watchPosition()은 클로저 개념을 이용해 (position) ⇒{ } 내부 함수에서 외부 변수인 watchId를 찾아서 접근하여 사용. (24.03.08)
+
+```jsx
+const watchId = navigator.geolocation.watchPosition(
+  (position) => {
+    setWatchState({ watchId });
+  },
+  (error) => {
+    console.error("Error getting user's location:", error);
+  }
+);
+```
 
 ### chapter 4 배포
 

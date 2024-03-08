@@ -3,12 +3,8 @@ import useSetMapsState from "./useSetMapsState";
 
 const useMaps = () => {
   //   const setSnackBar = useSetRecoilState(snackbarState);
-  const {
-    setPositionState,
-    setMovingState,
-    movingStateValue: { isMoving },
-    setMovingStorage,
-  } = useSetMapsState();
+  const { setPositionState, setWatchState, setWatchStorage } =
+    useSetMapsState();
   const getCurrentPosition = () => {
     // 사용자의 현재 위치를 가져와서 상태에 설정합니다.
     if (navigator.geolocation) {
@@ -31,28 +27,27 @@ const useMaps = () => {
     }
   };
   const watchPosition = () => {
-    navigator.geolocation.watchPosition(
+    //watchId:0 값으로 기록 중 중지 여부를 확인
+    const watchId = navigator.geolocation.watchPosition(
       (position) => {
-        // console.log(Math.random());
+        console.log(Math.random());
         const { latitude, longitude } = position.coords;
         setPositionState({ lat: latitude, lng: longitude });
+        setWatchStorage(watchId);
+        setWatchState({ watchId });
       },
       (error) => {
         console.error("Error getting user's location:", error);
       }
     );
-    // navigator.geolocation.clearWatch();
   };
-  const changeMovingState = () => {
-    if (isMoving) {
-      setMovingStorage(isMoving);
-      setMovingState((pre) => ({ ...pre, isMoving: !isMoving }));
-    } else {
-      setMovingStorage(isMoving);
-      setMovingState((pre) => ({ ...pre, isMoving: isMoving }));
-    }
+  const clearWatch = (watchId: number) => {
+    navigator.geolocation.clearWatch(watchId);
+    console.log("clear Watch");
+    setWatchStorage(0);
+    setWatchState({ watchId: 0 });
   };
-  return { getCurrentPosition, changeMovingState, watchPosition };
+  return { getCurrentPosition, watchPosition, clearWatch };
 };
 
 export default useMaps;

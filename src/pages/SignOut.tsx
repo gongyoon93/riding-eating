@@ -18,22 +18,14 @@ const Wrapper = styled.div`
 
 const SignOut = () => {
   const navigate = useNavigate();
-  const { removeLocalStorage, setUserState } = useRemoveUserState();
-  const {
-    setMovingState,
-    removeMovingStorage,
-    setPositionState,
-    removePositionStorage,
-  } = useRemoveMapsState();
+  const { setUserState } = useRemoveUserState();
+  const { setWatchState, setPositionState } = useRemoveMapsState();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // removeLocalStorage();
-      // removeMovingStorage();
-      // removePositionStorage();
       localStorage.clear();
       setUserState({ isLogin: false, uid: "", email: null, name: null });
-      setMovingState({ isMoving: false });
+      setWatchState({ watchId: 0 });
       setPositionState({
         lat: 0,
         lng: 0,

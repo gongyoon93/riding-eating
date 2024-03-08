@@ -4,7 +4,7 @@ import useSetUserState from "@/hooks/useSetUserState";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const TabBar = styled.footer<{ isMoving: boolean }>`
+const TabBar = styled.footer<{ watchId: number }>`
   background-color: ${({ theme }) => theme.color.second};
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
@@ -28,7 +28,9 @@ const TabBar = styled.footer<{ isMoving: boolean }>`
       border-right: 1px solid #ffffff;
       &:first-child {
         background-color: ${(props) =>
-          props.isMoving ? props.theme.color.main : props.theme.color.second};
+          props.watchId === 0
+            ? props.theme.color.second
+            : props.theme.color.main};
       }
       &:last-child {
         border-right: none;
@@ -51,16 +53,24 @@ const Footer = () => {
   } = useSetUserState();
 
   const {
-    movingStateValue: { isMoving },
+    watchStateValue: { watchId },
   } = useSetMapsState();
 
-  const { changeMovingState } = useMaps();
+  const { watchPosition, clearWatch } = useMaps();
+
+  const changeWatchPosition = () => {
+    if (watchId === 0) {
+      watchPosition();
+    } else {
+      clearWatch(watchId);
+    }
+  };
 
   return (
-    <TabBar isMoving={isMoving}>
+    <TabBar watchId={watchId}>
       <ul>
-        <li onClick={changeMovingState}>
-          {!isMoving ? "기록 시작" : "기록 중지"}
+        <li onClick={changeWatchPosition}>
+          {watchId === 0 ? "기록 시작" : "기록 중지"}
         </li>
         {isLogin && <li onClick={() => navigate("/signout")}>로그아웃</li>}
       </ul>

@@ -30,13 +30,13 @@ const blinkAnimation = keyframes`
   }
 `;
 
-const StyledMarker = styled.div<{ isMoving: boolean }>`
+const StyledMarker = styled.div<{ watchId: number }>`
   font-size: 1.5em;
   width: 50px;
   height: 50px;
   border: none;
   background: ${(props) =>
-      props.isMoving ? `url(${markerRed})` : `url(${markerGreen})`}
+      props.watchId === 0 ? `url(${markerGreen})` : `url(${markerRed})`}
     transparent;
   color: #000;
   animation: ${blinkAnimation} 1s linear infinite;
@@ -45,20 +45,20 @@ const StyledMarker = styled.div<{ isMoving: boolean }>`
 function Map() {
   const {
     positionStateValue,
-    movingStateValue: { isMoving },
-    setMovingState,
+    watchStateValue: { watchId },
+    setWatchState,
   } = useSetMapsState();
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
   });
 
-  const { getCurrentPosition, watchPosition } = useMaps();
+  const { getCurrentPosition } = useMaps();
 
   useEffect(() => {
-    const isMovingState = localStorage.getItem("movingState");
-    if (isMovingState) {
-      const isMoving = JSON.parse(isMovingState).isMoving === true;
-      setMovingState((pre) => ({ ...pre, isMoving }));
+    const watchState = localStorage.getItem("watchState");
+    if (watchState) {
+      const { watchId } = JSON.parse(watchState);
+      setWatchState({ watchId });
     }
   }, []);
 
@@ -70,32 +70,11 @@ function Map() {
     if (error) {
       console.log(error);
     }
-    if (isMoving) {
-      // watchPosition 실행
-      watchPosition();
-    }
-  }, [loading, error, isMoving]);
-
-  // useEffect(() => {
-  //   // 이동 경로 업데이트
-  //   if (prevPosition) {
-  //     const distance = kakao.maps.services.getDistance(
-  //       prevPosition,
-  //       positionStateValue
-  //     );
-  //     if (distance > 10) {
-  //       // 이동 거리가 10m를 초과하는 경우에만 경로 업데이트
-  //       setPath([...path, positionStateValue]);
-  //       setPrevPosition(positionStateValue);
-  //     }
-  //   } else {
-  //     setPrevPosition(positionStateValue);
-  //   }
-  // }, [positionStateValue]);
+  }, [loading, error]);
 
   return (
     <MapContainer>
-      {/* MapView 내부에서 loading 상태를 관찰 > conditional rendering 필요 x. */}
+      {/* MapView 내부에서 loading 상태를 관찰 > conditional rendering 필요 x, hook의 return 값으로 판별*/}
       <MapView
         center={{ lat: positionStateValue.lat, lng: positionStateValue.lng }}
         style={{
@@ -127,10 +106,9 @@ function Map() {
             lat: positionStateValue.lat,
             lng: positionStateValue.lng,
           }}
-          // xAnchor={0.7}
           yAnchor={0.85}
         >
-          <StyledMarker isMoving={isMoving} />
+          <StyledMarker watchId={watchId} />
         </CustomOverlayMap>
       </MapView>
       <Footer />
