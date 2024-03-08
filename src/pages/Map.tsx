@@ -6,6 +6,7 @@ import {
   Map as MapView,
   useKakaoLoader,
   CustomOverlayMap,
+  Polyline,
 } from "react-kakao-maps-sdk";
 import styled, { keyframes } from "styled-components";
 import markerGreen from "@/assets/images/marker_green.png";
@@ -51,7 +52,7 @@ function Map() {
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
   });
 
-  const { getCurrentPosition } = useMaps();
+  const { getCurrentPosition, watchPosition } = useMaps();
 
   useEffect(() => {
     const isMovingState = localStorage.getItem("movingState");
@@ -69,7 +70,28 @@ function Map() {
     if (error) {
       console.log(error);
     }
-  }, [loading, error]);
+    if (isMoving) {
+      // watchPosition 실행
+      watchPosition();
+    }
+  }, [loading, error, isMoving]);
+
+  // useEffect(() => {
+  //   // 이동 경로 업데이트
+  //   if (prevPosition) {
+  //     const distance = kakao.maps.services.getDistance(
+  //       prevPosition,
+  //       positionStateValue
+  //     );
+  //     if (distance > 10) {
+  //       // 이동 거리가 10m를 초과하는 경우에만 경로 업데이트
+  //       setPath([...path, positionStateValue]);
+  //       setPrevPosition(positionStateValue);
+  //     }
+  //   } else {
+  //     setPrevPosition(positionStateValue);
+  //   }
+  // }, [positionStateValue]);
 
   return (
     <MapContainer>
@@ -83,13 +105,30 @@ function Map() {
         }}
         level={3}
       >
+        {/* 이동 경로 표시 */}
+        <Polyline
+          path={[
+            {
+              lat: 37.6129508,
+              lng: 127.035433,
+            },
+            {
+              lat: 37.61299491199771,
+              lng: 127.03542836895198,
+            },
+          ]}
+          strokeColor={"#4B96F3"}
+          strokeOpacity={0.7}
+          strokeWeight={5}
+        />
+        {/* 현재 위치 표시 */}
         <CustomOverlayMap
           position={{
             lat: positionStateValue.lat,
             lng: positionStateValue.lng,
           }}
-          xAnchor={0.7}
-          yAnchor={0.8}
+          // xAnchor={0.7}
+          yAnchor={0.85}
         >
           <StyledMarker isMoving={isMoving} />
         </CustomOverlayMap>

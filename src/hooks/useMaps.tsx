@@ -16,6 +16,7 @@ const useMaps = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           // 걷기 기록 시작 후 전역 상태에 저장?
+          // console.log(latitude, longitude);
           setPositionState({
             lat: latitude,
             lng: longitude,
@@ -29,11 +30,29 @@ const useMaps = () => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
-  const changeMovingState = () => {
-    setMovingStorage(isMoving);
-    setMovingState((pre) => ({ ...pre, isMoving: !isMoving }));
+  const watchPosition = () => {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        // console.log(Math.random());
+        const { latitude, longitude } = position.coords;
+        setPositionState({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
+    // navigator.geolocation.clearWatch();
   };
-  return { getCurrentPosition, changeMovingState };
+  const changeMovingState = () => {
+    if (isMoving) {
+      setMovingStorage(isMoving);
+      setMovingState((pre) => ({ ...pre, isMoving: !isMoving }));
+    } else {
+      setMovingStorage(isMoving);
+      setMovingState((pre) => ({ ...pre, isMoving: isMoving }));
+    }
+  };
+  return { getCurrentPosition, changeMovingState, watchPosition };
 };
 
 export default useMaps;
