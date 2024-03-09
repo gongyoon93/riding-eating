@@ -3,8 +3,12 @@ import useSetMapsState from "./useSetMapsState";
 
 const useMaps = () => {
   //   const setSnackBar = useSetRecoilState(snackbarState);
-  const { setPositionState, setWatchState, setWatchStorage } =
-    useSetMapsState();
+  const {
+    setPositionState,
+    watchStateValue: { watchId },
+    setWatchState,
+    setWatchStorage,
+  } = useSetMapsState();
   const getCurrentPosition = () => {
     // 사용자의 현재 위치를 가져와 상태에 설정
     if (navigator.geolocation) {
@@ -28,12 +32,12 @@ const useMaps = () => {
   };
   const watchPosition = () => {
     //watchId:0 값으로 기록 중 중지 여부를 확인
-    const watchId = navigator.geolocation.watchPosition(
+    const watchPositionId = navigator.geolocation.watchPosition(
       (position) => {
         // console.log(Math.random());
         if (watchId === 0) {
-          setWatchStorage(watchId);
-          setWatchState({ watchId });
+          setWatchStorage(watchPositionId);
+          setWatchState({ watchId: watchPositionId });
         }
         const { latitude, longitude } = position.coords;
 
