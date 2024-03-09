@@ -17,10 +17,17 @@ const useMaps = () => {
           const { latitude, longitude } = position.coords;
           // 걷기 기록 시작 후 전역 상태에 저장?
           // console.log(latitude, longitude);
-          setPositionState({
-            lat: latitude,
-            lng: longitude,
-          });
+          if (watchId === 0) {
+            setPositionState([{ lat: latitude, lng: longitude }]);
+          } else {
+            setPositionState((pre) => [
+              {
+                lat: latitude,
+                lng: longitude,
+              },
+              ...pre,
+            ]);
+          }
         },
         (error) => {
           console.error("Error getting user's location:", error);
@@ -43,7 +50,13 @@ const useMaps = () => {
 
         //거리 25m 이동시 저장
 
-        setPositionState({ lat: latitude, lng: longitude });
+        setPositionState((pre) => [
+          {
+            lat: latitude,
+            lng: longitude,
+          },
+          ...pre,
+        ]);
       },
       (error) => {
         console.error("Error getting user's location:", error);

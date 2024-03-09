@@ -5,12 +5,14 @@ interface PositionState {
   lng: number;
 }
 
-export const positionState = atom<PositionState>({
+export const positionState = atom<PositionState[]>({
   key: "positionState",
-  default: {
-    lat: 37.3595704,
-    lng: 127.105399,
-  },
+  default: [
+    {
+      lat: 37.3595704,
+      lng: 127.105399,
+    },
+  ],
 });
 
 export const watchState = atom<{ watchId: number }>({

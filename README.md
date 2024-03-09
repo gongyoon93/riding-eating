@@ -23,12 +23,6 @@ export default defineConfig({
 });
 ```
 
-vite 환경변수 설정 - [https://velog.io/@riley_dev/React-vite에서-환경변수-.env-설정하기](https://velog.io/@riley_dev/React-vite%EC%97%90%EC%84%9C-%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98-.env-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)
-
-! 중간 에러
-
-1. no- unused-vars eslint 에러 > 선언하고 사용하지 않는 변수는 제거로 임시 해결
-
 ### chapter 2 폴더 구조 정리
 
 ![riding-eating_폴더구조2](https://github.com/gongyoon93/riding-eating/assets/94844343/60472615-5f6f-418a-a981-6388d201d836)
@@ -101,6 +95,23 @@ const watchId = navigator.geolocation.watchPosition(
     console.error("Error getting user's location:", error);
   }
 );
+```
+
+- ‘() ⇒ void’ type을 사용하는 함수는 실제로 반환하는 값은 undefined이고 반환 되지 않는 것을 강제 않는다. (24.03.09)
+  - const f1 = ():void ⇒ ({lat:123, lngt:110})
+- new kakao.maps.LatLng() 반복적인 생성 > useCallback 이전의 함수 인스턴스 재사용으로 성능 향상 (24.03.09)
+
+```jsx
+const setPositionCenter = useCallback(() => {
+  const map = mapRef.current;
+  if (!map) return;
+  map.setCenter(
+    new kakao.maps.LatLng(
+      positionStateValue[0].lat ?? 37.3595704,
+      positionStateValue[0].lng ?? 127.105399
+    )
+  );
+}, [positionStateValue]);
 ```
 
 ### chapter 4 배포
