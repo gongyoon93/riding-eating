@@ -102,7 +102,7 @@ function Map() {
   useEffect(() => {
     if (!loading) {
       console.log("loaded");
-      getCurrentPosition();
+      getCurrentPosition(setPositionCenter);
     }
     if (error) {
       console.log(error);
@@ -146,7 +146,9 @@ function Map() {
           <StyledMarker watchId={watchId} />
         </CustomOverlayMap>
       </MapView>
-      <StyledPoistionButton onClick={setPositionCenter} />
+      <StyledPoistionButton
+        onClick={() => getCurrentPosition(setPositionCenter)}
+      />
       <Footer />
     </MapContainer>
   );

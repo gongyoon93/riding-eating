@@ -1,32 +1,41 @@
 // import { snackbarState } from "@/atoms/snackbar";
 import useSetMapsState from "./useSetMapsState";
+import { getDistance } from "geolib";
 
 const useMaps = () => {
   //   const setSnackBar = useSetRecoilState(snackbarState);
   const {
+    positionStateValue,
     setPositionState,
     watchStateValue: { watchId },
     setWatchState,
     setWatchStorage,
   } = useSetMapsState();
-  const getCurrentPosition = () => {
+  const getCurrentPosition = (centerFn: () => void) => {
     // 사용자의 현재 위치를 가져와 상태에 설정
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // 걷기 기록 시작 후 전역 상태에 저장?
+          // 기록 시작 후 전역 상태에 저장?
           // console.log(latitude, longitude);
-          if (watchId === 0) {
-            setPositionState([{ lat: latitude, lng: longitude }]);
+          if (
+            positionStateValue[0].lat === latitude &&
+            positionStateValue[0].lng === longitude
+          ) {
+            centerFn();
           } else {
-            setPositionState((pre) => [
-              {
-                lat: latitude,
-                lng: longitude,
-              },
-              ...pre,
-            ]);
+            if (watchId === 0) {
+              setPositionState([{ lat: latitude, lng: longitude }]);
+            } else {
+              setPositionState((pre) => [
+                {
+                  lat: latitude,
+                  lng: longitude,
+                },
+                ...pre,
+              ]);
+            }
           }
         },
         (error) => {
@@ -42,21 +51,29 @@ const useMaps = () => {
     const watchPositionId = navigator.geolocation.watchPosition(
       (position) => {
         // console.log(Math.random());
+        // 시작시에만 변경하는 상태
         if (watchId === 0) {
           setWatchStorage(watchPositionId);
           setWatchState({ watchId: watchPositionId });
         }
-        const { latitude, longitude } = position.coords;
-
         //거리 25m 이동시 저장
-
-        setPositionState((pre) => [
+        const { latitude, longitude } = position.coords;
+        const distance = getDistance(
+          { latitude, longitude },
           {
-            lat: latitude,
-            lng: longitude,
-          },
-          ...pre,
-        ]);
+            latitude: positionStateValue[0].lat,
+            longitude: positionStateValue[0].lng,
+          }
+        );
+        if (distance > 25) {
+          setPositionState((pre) => [
+            {
+              lat: latitude,
+              lng: longitude,
+            },
+            ...pre,
+          ]);
+        }
       },
       (error) => {
         console.error("Error getting user's location:", error);
