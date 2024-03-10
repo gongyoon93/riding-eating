@@ -85,8 +85,8 @@ function Map() {
     if (!map) return;
     map.setCenter(
       new kakao.maps.LatLng(
-        positionStateValue[0].lat ?? 37.3595704,
-        positionStateValue[0].lng ?? 127.105399
+        positionStateValue[0].lat,
+        positionStateValue[0].lng
       )
     );
   }, [positionStateValue]);
@@ -116,8 +116,8 @@ function Map() {
         ref={mapRef}
         isPanto={true}
         center={{
-          lat: positionStateValue[0].lat ?? 37.3595704,
-          lng: positionStateValue[0].lng ?? 127.105399,
+          lat: positionStateValue[0].lat,
+          lng: positionStateValue[0].lng,
         }}
         style={{
           width: "100%",

@@ -1,9 +1,7 @@
-// import { snackbarState } from "@/atoms/snackbar";
 import useSetMapsState from "./useSetMapsState";
 import { getDistance } from "geolib";
 
 const useMaps = () => {
-  //   const setSnackBar = useSetRecoilState(snackbarState);
   const {
     positionStateValue,
     setPositionState,
@@ -18,7 +16,6 @@ const useMaps = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           // 기록 시작 후 전역 상태에 저장?
-          // console.log(latitude, longitude);
           if (
             positionStateValue[0].lat === latitude &&
             positionStateValue[0].lng === longitude
@@ -50,7 +47,6 @@ const useMaps = () => {
     //watchId:0 값으로 기록 중 중지 여부를 확인
     const watchPositionId = navigator.geolocation.watchPosition(
       (position) => {
-        // console.log(Math.random());
         // 시작시에만 변경하는 상태
         if (watchId === 0) {
           setWatchStorage(watchPositionId);
@@ -82,7 +78,6 @@ const useMaps = () => {
   };
   const clearWatch = (watchId: number) => {
     navigator.geolocation.clearWatch(watchId);
-    // console.log("clear Watch");
     setWatchStorage(0);
     setWatchState({ watchId: 0 });
   };
