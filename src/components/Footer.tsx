@@ -59,11 +59,11 @@ const Footer = () => {
   const { watchPosition, clearWatch } = useMaps();
 
   const changeWatchPosition = () => {
-    if (watchId === 0) {
-      watchPosition();
-    } else {
-      clearWatch(watchId);
-    }
+    // if (watchId === 0) {
+    //   watchPosition();
+    // } else {
+    //   clearWatch(watchId);
+    // }
   };
 
   return (

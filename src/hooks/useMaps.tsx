@@ -37,7 +37,8 @@ const useMaps = () => {
         },
         (error) => {
           console.error("Error getting user's location:", error);
-        }
+        },
+        { enableHighAccuracy: true }
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
@@ -52,7 +53,7 @@ const useMaps = () => {
           setWatchStorage(watchPositionId);
           setWatchState({ watchId: watchPositionId });
         }
-        //거리 25m 이동시 저장
+        //거리 25m 이상 이동한 경우 저장
         const { latitude, longitude } = position.coords;
         const distance = getDistance(
           { latitude, longitude },
@@ -73,7 +74,8 @@ const useMaps = () => {
       },
       (error) => {
         console.error("Error getting user's location:", error);
-      }
+      },
+      { enableHighAccuracy: true }
     );
   };
   const clearWatch = (watchId: number) => {
