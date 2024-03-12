@@ -1,12 +1,15 @@
 import Footer from "@/components/Footer";
 import useMaps from "@/hooks/useMaps";
 import useSetMapsState from "@/hooks/useSetMapsState";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   Map as MapView,
   useKakaoLoader,
-  CustomOverlayMap,
-  Polyline,
+  // CustomOverlayMap,
+  ZoomControl,
+  MapTypeControl,
+  MapMarker,
+  // Polyline,
 } from "react-kakao-maps-sdk";
 import styled, { keyframes } from "styled-components";
 import markerGreen from "@/assets/images/marker_green.png";
@@ -68,28 +71,30 @@ const StyledPoistionButton = styled.button`
   }
 `;
 
+const Btn = styled.button`
+  cursor: pointer;
+  position: absolute;
+  z-index: 1031;
+  bottom: 120px;
+  right: 25px;
+  width: 45px;
+  height: 45px;
+`;
+
 function Map() {
-  const mapRef = useRef<kakao.maps.Map>(null);
+  const [map, setMap] = useState<kakao.maps.Map>();
   const {
     positionStateValue,
+    markerStateValue,
     watchStateValue: { watchId },
     setWatchState,
   } = useSetMapsState();
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
+    libraries: ["clusterer", "services"],
   });
-  const { getCurrentPosition } = useMaps();
 
-  const setPositionCenter = useCallback(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    map.setCenter(
-      new kakao.maps.LatLng(
-        positionStateValue[0].lat,
-        positionStateValue[0].lng
-      )
-    );
-  }, [positionStateValue]);
+  const { setPositionCenter, getCurrentPosition, searchPlaces } = useMaps(map);
 
   useEffect(() => {
     const watchState = localStorage.getItem("watchState");
@@ -100,24 +105,24 @@ function Map() {
   }, []);
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && map) {
       console.log("loaded");
-      getCurrentPosition(setPositionCenter);
+      // getCurrentPosition(setPositionCenter);
+      searchPlaces("하월곡동 치킨");
     }
     if (error) {
       console.log(error);
     }
-  }, [loading, error]);
+  }, [loading, error, map]);
 
   return (
     <MapContainer>
       {/* MapView 내부에서 loading 상태를 관찰 > conditional rendering 필요 x, hook의 return 값으로 판별*/}
       <MapView
-        ref={mapRef}
         isPanto={true}
         center={{
-          lat: positionStateValue[0].lat,
-          lng: positionStateValue[0].lng,
+          lat: positionStateValue.lat,
+          lng: positionStateValue.lng,
         }}
         style={{
           width: "100%",
@@ -125,30 +130,48 @@ function Map() {
           backgroundColor: "#f0f0f0",
         }}
         level={3}
+        onCreate={setMap}
       >
         {/* 이동 경로 표시 */}
-        {watchId !== 0 && (
+        {/* {watchId !== 0 && (
           <Polyline
             path={positionStateValue}
             strokeColor={"#4B96F3"}
             strokeOpacity={0.7}
             strokeWeight={5}
           />
-        )}
+        )} */}
+
+        {/* 컨트롤 표시 */}
+        <ZoomControl position={"RIGHT"} />
+        <MapTypeControl position={"TOPRIGHT"} />
+
         {/* 현재 위치 표시 */}
-        <CustomOverlayMap
+        {/* <CustomOverlayMap
           position={{
-            lat: positionStateValue[0].lat ?? 37.3595704,
-            lng: positionStateValue[0].lng ?? 127.105399,
+            lat: positionStateValue.lat,
+            lng: positionStateValue.lng,
           }}
           yAnchor={0.85}
         >
           <StyledMarker watchId={watchId} />
-        </CustomOverlayMap>
+        </CustomOverlayMap> */}
+        {markerStateValue?.map((marker) => (
+          <MapMarker
+            key={`marker-${marker.place_name}-${marker.lat},${marker.lng}`}
+            position={{ lat: marker.lat, lng: marker.lng }}
+            // onClick={() => setInfo(marker)}
+          >
+            {/* {info && info.content === marker.content && (
+            <div style={{color:"#000"}}>{marker.content}</div>
+          )} */}
+          </MapMarker>
+        ))}
       </MapView>
       <StyledPoistionButton
         onClick={() => getCurrentPosition(setPositionCenter)}
       />
+      <Btn onClick={() => searchPlaces("하월곡동 애견 동반")} />
       <Footer />
     </MapContainer>
   );

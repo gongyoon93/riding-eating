@@ -1,4 +1,4 @@
-import { positionState, watchState } from "@/atoms/maps";
+import { markerState, positionState, watchState } from "@/atoms/maps";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 const useSetMapsState = () => {
@@ -11,6 +11,8 @@ const useSetMapsState = () => {
     };
     localStorage.setItem("currentPositionState", JSON.stringify(positionState));
   };
+  const setMarkerState = useSetRecoilState(markerState);
+  const markerStateValue = useRecoilValue(markerState);
   const setWatchState = useSetRecoilState(watchState);
   const watchStateValue = useRecoilValue(watchState);
   const setWatchStorage = (watchId: number) => {
@@ -23,6 +25,8 @@ const useSetMapsState = () => {
     setCurrentPositionStorage,
     setPositionState,
     positionStateValue,
+    setMarkerState,
+    markerStateValue,
     setWatchState,
     watchStateValue,
     setWatchStorage,

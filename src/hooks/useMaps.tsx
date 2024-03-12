@@ -1,38 +1,39 @@
+import { useCallback } from "react";
 import useSetMapsState from "./useSetMapsState";
 import { getDistance } from "geolib";
 
-const useMaps = () => {
+const useMaps = (map?: kakao.maps.Map) => {
   const {
     positionStateValue,
     setPositionState,
+    markerStateValue,
+    setMarkerState,
     watchStateValue: { watchId },
     setWatchState,
     setWatchStorage,
   } = useSetMapsState();
+
+  // 지도 중심 좌표 이동
+  const setPositionCenter = useCallback(() => {
+    if (!map) return;
+    map.setCenter(
+      new kakao.maps.LatLng(positionStateValue.lat, positionStateValue.lng)
+    );
+  }, [positionStateValue]);
+
+  // 사용자의 현재 위치로 상태 업데이트
   const getCurrentPosition = (centerFn: () => void) => {
-    // 사용자의 현재 위치를 가져와 상태에 설정
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // 기록 시작 후 전역 상태에 저장?
           if (
-            positionStateValue[0].lat === latitude &&
-            positionStateValue[0].lng === longitude
+            positionStateValue.lat === latitude &&
+            positionStateValue.lng === longitude
           ) {
             centerFn();
           } else {
-            if (watchId === 0) {
-              setPositionState([{ lat: latitude, lng: longitude }]);
-            } else {
-              setPositionState((pre) => [
-                {
-                  lat: latitude,
-                  lng: longitude,
-                },
-                ...pre,
-              ]);
-            }
+            setPositionState({ lat: latitude, lng: longitude });
           }
         },
         (error) => {
@@ -44,6 +45,52 @@ const useMaps = () => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
+
+  // 키워드로 장소 검색
+  const searchPlaces = useCallback(
+    (keyword: string) => {
+      if (!map) return;
+      const places = new kakao.maps.services.Places();
+      const options = { page: 1 };
+      places.keywordSearch(
+        keyword,
+        (result, status, pagination) => {
+          console.log(result, status, pagination);
+          if (status === "OK") {
+            const markers = result.map((item) => ({
+              address_name: item.address_name,
+              road_address_name: item.road_address_name,
+              category_group_name: item.category_group_name,
+              category_name: item.category_name,
+              phone: item.place_url,
+              place_name: item.place_name,
+              place_url: item.place_url,
+              lat: +item.y,
+              lng: +item.x,
+              id: +item.id,
+            }));
+            setMarkerState(markers);
+
+            const bounds = new kakao.maps.LatLngBounds();
+            markers.forEach((marker) =>
+              bounds.extend(new kakao.maps.LatLng(marker.lat, marker.lng))
+            );
+            // 검색된 장소 위치를 기준으로 지도 범위를 재설정.
+            map.setBounds(bounds);
+          } else if (status == "ZERO_RESULT") {
+            setMarkerState(null);
+          } else {
+            console.log("SearchPlaces Error");
+          }
+        },
+        options
+      );
+    },
+    [map, markerStateValue]
+  );
+
+  // 마커 클러스터링
+
   const watchPosition = () => {
     //watchId:0 값으로 기록 중 중지 여부를 확인
     const watchPositionId = navigator.geolocation.watchPosition(
@@ -58,18 +105,15 @@ const useMaps = () => {
         const distance = getDistance(
           { latitude, longitude },
           {
-            latitude: positionStateValue[0].lat,
-            longitude: positionStateValue[0].lng,
+            latitude: positionStateValue.lat,
+            longitude: positionStateValue.lng,
           }
         );
         if (distance > 25) {
-          setPositionState((pre) => [
-            {
-              lat: latitude,
-              lng: longitude,
-            },
-            ...pre,
-          ]);
+          setPositionState({
+            lat: latitude,
+            lng: longitude,
+          });
         }
       },
       (error) => {
@@ -83,7 +127,13 @@ const useMaps = () => {
     setWatchStorage(0);
     setWatchState({ watchId: 0 });
   };
-  return { getCurrentPosition, watchPosition, clearWatch };
+  return {
+    setPositionCenter,
+    getCurrentPosition,
+    searchPlaces,
+    watchPosition,
+    clearWatch,
+  };
 };
 
 export default useMaps;

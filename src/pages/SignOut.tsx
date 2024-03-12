@@ -26,12 +26,10 @@ const SignOut = () => {
       localStorage.clear();
       setUserState({ isLogin: false, uid: "", email: null, name: null });
       setWatchState({ watchId: 0 });
-      setPositionState([
-        {
-          lat: 37.3595704,
-          lng: 127.105399,
-        },
-      ]);
+      setPositionState({
+        lat: 37.3595704,
+        lng: 127.105399,
+      });
       navigate("/");
     }, 1000) as NodeJS.Timeout;
 

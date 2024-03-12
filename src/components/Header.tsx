@@ -53,7 +53,7 @@ const Header = () => {
     <Wrapper>
       <LogContainer>
         <Link to={"/"}>
-          <h1>🚲</h1>
+          <h1>🐶</h1>
         </Link>
       </LogContainer>
       <nav>
