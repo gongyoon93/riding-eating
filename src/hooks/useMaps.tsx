@@ -52,10 +52,11 @@ const useMaps = (map?: kakao.maps.Map) => {
       if (!map) return;
       const places = new kakao.maps.services.Places();
       const options = { page: 1 };
+      keyword += "반려동물";
       places.keywordSearch(
         keyword,
         (result, status, pagination) => {
-          console.log(result, status, pagination);
+          // console.log(result, status, pagination);
           if (status === "OK") {
             const markers = result.map((item) => ({
               address_name: item.address_name,
@@ -69,16 +70,24 @@ const useMaps = (map?: kakao.maps.Map) => {
               lng: +item.x,
               id: +item.id,
             }));
-            setMarkerState(markers);
 
-            const bounds = new kakao.maps.LatLngBounds();
-            markers.forEach((marker) =>
-              bounds.extend(new kakao.maps.LatLng(marker.lat, marker.lng))
-            );
-            // 검색된 장소 위치를 기준으로 지도 범위를 재설정.
-            map.setBounds(bounds);
+            console.log(markers);
+            if (markers.length !== 0) {
+              setMarkerState(markers);
+
+              const bounds = new kakao.maps.LatLngBounds();
+              markers.forEach((marker) =>
+                bounds.extend(new kakao.maps.LatLng(marker.lat, marker.lng))
+              );
+              // 검색된 장소 위치를 기준으로 지도 범위를 재설정.
+              map.setBounds(bounds);
+            } else {
+              setMarkerState(null);
+              getCurrentPosition(setPositionCenter);
+            }
           } else if (status == "ZERO_RESULT") {
             setMarkerState(null);
+            getCurrentPosition(setPositionCenter);
           } else {
             console.log("SearchPlaces Error");
           }

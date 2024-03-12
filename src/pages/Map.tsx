@@ -108,7 +108,7 @@ function Map() {
     if (!loading && map) {
       console.log("loaded");
       // getCurrentPosition(setPositionCenter);
-      searchPlaces("하월곡동 치킨");
+      searchPlaces("성북구 하월곡동");
     }
     if (error) {
       console.log(error);
