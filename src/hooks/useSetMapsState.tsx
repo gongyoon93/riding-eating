@@ -22,7 +22,7 @@ const useSetMapsState = () => {
   const keywordStateValue = useRecoilValue(keywordState);
   const setKeywordStorage = (keyword: string) => {
     const keywordState = {
-      keyword,
+      keyword: keyword.replace(/\s*반려동물\s*/g, ""),
     };
     localStorage.setItem("keywordState", JSON.stringify(keywordState));
   };

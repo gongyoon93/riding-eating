@@ -65,7 +65,7 @@ const useMaps = (map?: kakao.maps.Map) => {
               road_address_name: item.road_address_name,
               category_group_name: item.category_group_name,
               category_name: item.category_name,
-              phone: item.place_url,
+              phone: item.phone,
               place_name: item.place_name,
               place_url: item.place_url,
               lat: +item.y,

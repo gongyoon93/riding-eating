@@ -1,4 +1,4 @@
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
 import useMaps from "@/hooks/useMaps";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import { useEffect, useState } from "react";
@@ -14,15 +14,11 @@ import {
 import styled, { keyframes } from "styled-components";
 import markerGreen from "@/assets/images/marker_green.png";
 import markerRed from "@/assets/images/marker_red.png";
-import targetBlack from "@/assets/images/target_black.png";
 import SearchPlaceList from "@/components/SearchPlaceList";
-
-const MapContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* 화면 전체 높이 */
-  position: relative;
-`;
+import {
+  MapContainer,
+  StyledPoistionButton,
+} from "@/styled/maps/MapDefaultStyle";
 
 const blinkAnimation = keyframes`
   0% {
@@ -48,30 +44,6 @@ const StyledMarker = styled.div<{ watchId: number }>`
   animation: ${blinkAnimation} 1s linear infinite;
 `;
 
-const StyledPoistionButton = styled.button`
-  cursor: pointer;
-  position: absolute;
-  z-index: 1031;
-  bottom: 70px;
-  right: 25px;
-  width: 45px;
-  height: 45px;
-  background: url(${targetBlack}) center/30px 30px no-repeat #ffffff;
-  overflow: hidden;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
-
-  @media screen and (max-width: 768px) {
-    background: url(${targetBlack}) center/22px 22px no-repeat #ffffff;
-    width: 35px;
-    height: 35px;
-    right: 15px;
-    bottom: 62px;
-  }
-`;
-
 const Btn = styled.button`
   cursor: pointer;
   position: absolute;
@@ -87,6 +59,7 @@ function Map() {
   const {
     positionStateValue,
     markerStateValue,
+    keywordStateValue: { keyword },
     setKeywordState,
     // watchStateValue: { watchId },
     // setWatchState,
@@ -106,8 +79,8 @@ function Map() {
     // }
     const keywordState = localStorage.getItem("keywordState");
     if (keywordState) {
-      const { keyword } = JSON.parse(keywordState);
-      setKeywordState({ keyword: keyword.replace(/\s*반려동물\s*/g, "") });
+      const keyword = JSON.parse(keywordState);
+      setKeywordState(keyword);
     }
   }, []);
 
@@ -115,7 +88,7 @@ function Map() {
     if (!loading && map) {
       console.log("loaded");
       // getCurrentPosition(setPositionCenter);
-      searchPlaces("성북구 하월곡동");
+      searchPlaces(keyword);
     }
     if (error) {
       console.log(error);
@@ -180,7 +153,7 @@ function Map() {
         onClick={() => getCurrentPosition(setPositionCenter)}
       />
       <Btn onClick={() => {}} />
-      {/* <Footer /> */}
+      <Footer />
     </MapContainer>
   );
 }

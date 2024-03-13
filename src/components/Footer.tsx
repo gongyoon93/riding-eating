@@ -69,9 +69,9 @@ const Footer = () => {
   return (
     <TabBar watchId={watchId}>
       <ul>
-        <li onClick={changeWatchPosition}>
+        {/* <li onClick={changeWatchPosition}>
           {watchId === 0 ? "길 찾기" : "길 찾기 중지"}
-        </li>
+        </li> */}
         {isLogin && <li onClick={() => navigate("/signout")}>로그아웃</li>}
       </ul>
     </TabBar>

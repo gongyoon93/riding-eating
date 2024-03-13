@@ -1,21 +1,17 @@
 import styled from "styled-components";
 import React from "react";
 import useSetMapsState from "@/hooks/useSetMapsState";
-import { SearchContainer, SearchInput } from "@/styled/maps/MapSearchStyle";
+import {
+  PMLContents,
+  PMLIcon,
+  PlaceList,
+  PlaceMarkerList,
+  SearchContainer,
+  SearchInput,
+} from "@/styled/maps/MapSearchStyle";
 import useMaps from "@/hooks/useMaps";
 
-const PlaceList = styled.ul`
-  padding: 10px 10px;
-  width: calc(100% - 20px);
-  flex: 1;
-  border-radius: 4px;
-  border: none;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.2),
-    0 -1px 0px rgba(0, 0, 0, 0.02);
-  li {
-  }
-`;
+const CountPerPage = styled.ul``;
 
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const {
@@ -39,9 +35,17 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
       />
       <PlaceList>
         {markerStateValue?.map((mark) => (
-          <li key={`장소 목록-${mark.id}`}>마커 내용</li>
+          <PlaceMarkerList key={`장소 목록-${mark.id}`}>
+            <PMLIcon />
+            <PMLContents>
+              <p>{mark.place_name}</p>
+              <p>{mark.road_address_name}</p>
+              <p>{mark.phone}</p>
+            </PMLContents>
+          </PlaceMarkerList>
         ))}
       </PlaceList>
+      <CountPerPage />
     </SearchContainer>
   );
 });
