@@ -19,7 +19,8 @@ const Wrapper = styled.div`
 const SignOut = () => {
   const navigate = useNavigate();
   const { setUserState } = useRemoveUserState();
-  const { setWatchState, setPositionState } = useRemoveMapsState();
+  const { setWatchState, setPositionState, setKeywordState } =
+    useRemoveMapsState();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -30,6 +31,7 @@ const SignOut = () => {
         lat: 37.3595704,
         lng: 127.105399,
       });
+      setKeywordState({ keyword: "" });
       navigate("/");
     }, 1000) as NodeJS.Timeout;
 

@@ -1,4 +1,4 @@
-import { positionState, watchState } from "@/atoms/maps";
+import { keywordState, positionState, watchState } from "@/atoms/maps";
 import { useSetRecoilState } from "recoil";
 
 const useRemoveMapsState = () => {
@@ -12,11 +12,18 @@ const useRemoveMapsState = () => {
     localStorage.removeItem("positionState");
   };
 
+  const setKeywordState = useSetRecoilState(keywordState);
+  const removeKeywordStorage = () => {
+    localStorage.removeItem("keywordState");
+  };
+
   return {
     setWatchState,
     removeWatchStorage,
     setPositionState,
     removePositionStorage,
+    setKeywordState,
+    removeKeywordStorage,
   };
 };
 

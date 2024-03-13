@@ -1,11 +1,11 @@
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import useMaps from "@/hooks/useMaps";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import { useEffect, useState } from "react";
 import {
   Map as MapView,
   useKakaoLoader,
-  // CustomOverlayMap,
+  CustomOverlayMap,
   ZoomControl,
   MapTypeControl,
   MapMarker,
@@ -15,6 +15,7 @@ import styled, { keyframes } from "styled-components";
 import markerGreen from "@/assets/images/marker_green.png";
 import markerRed from "@/assets/images/marker_red.png";
 import targetBlack from "@/assets/images/target_black.png";
+import SearchPlaceList from "@/components/SearchPlaceList";
 
 const MapContainer = styled.section`
   display: flex;
@@ -86,8 +87,9 @@ function Map() {
   const {
     positionStateValue,
     markerStateValue,
-    watchStateValue: { watchId },
-    setWatchState,
+    setKeywordState,
+    // watchStateValue: { watchId },
+    // setWatchState,
   } = useSetMapsState();
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
@@ -97,10 +99,15 @@ function Map() {
   const { setPositionCenter, getCurrentPosition, searchPlaces } = useMaps(map);
 
   useEffect(() => {
-    const watchState = localStorage.getItem("watchState");
-    if (watchState) {
-      const { watchId } = JSON.parse(watchState);
-      setWatchState({ watchId });
+    // const watchState = localStorage.getItem("watchState");
+    // if (watchState) {
+    //   const { watchId } = JSON.parse(watchState);
+    //   setWatchState({ watchId });
+    // }
+    const keywordState = localStorage.getItem("keywordState");
+    if (keywordState) {
+      const { keyword } = JSON.parse(keywordState);
+      setKeywordState({ keyword: keyword.replace(/\s*반려동물\s*/g, "") });
     }
   }, []);
 
@@ -147,15 +154,15 @@ function Map() {
         <MapTypeControl position={"TOPRIGHT"} />
 
         {/* 현재 위치 표시 */}
-        {/* <CustomOverlayMap
+        <CustomOverlayMap
           position={{
             lat: positionStateValue.lat,
             lng: positionStateValue.lng,
           }}
           yAnchor={0.85}
         >
-          <StyledMarker watchId={watchId} />
-        </CustomOverlayMap> */}
+          <StyledMarker watchId={0} />
+        </CustomOverlayMap>
         {markerStateValue?.map((marker) => (
           <MapMarker
             key={`marker-${marker.place_name}-${marker.lat},${marker.lng}`}
@@ -168,11 +175,12 @@ function Map() {
           </MapMarker>
         ))}
       </MapView>
+      <SearchPlaceList map={map} />
       <StyledPoistionButton
         onClick={() => getCurrentPosition(setPositionCenter)}
       />
-      <Btn onClick={() => searchPlaces("하월곡동 애견 동반")} />
-      <Footer />
+      <Btn onClick={() => {}} />
+      {/* <Footer /> */}
     </MapContainer>
   );
 }

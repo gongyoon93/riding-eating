@@ -50,3 +50,10 @@ export const markerState = atom<MarkerState[] | null>({
     },
   ],
 });
+
+export const keywordState = atom<{ keyword: string }>({
+  key: "keywordState",
+  default: {
+    keyword: "",
+  },
+});

@@ -6,8 +6,8 @@ const useMaps = (map?: kakao.maps.Map) => {
   const {
     positionStateValue,
     setPositionState,
-    markerStateValue,
     setMarkerState,
+    setKeywordStorage,
     watchStateValue: { watchId },
     setWatchState,
     setWatchStorage,
@@ -19,7 +19,7 @@ const useMaps = (map?: kakao.maps.Map) => {
     map.setCenter(
       new kakao.maps.LatLng(positionStateValue.lat, positionStateValue.lng)
     );
-  }, [positionStateValue]);
+  }, [map, positionStateValue]);
 
   // 사용자의 현재 위치로 상태 업데이트
   const getCurrentPosition = (centerFn: () => void) => {
@@ -52,7 +52,9 @@ const useMaps = (map?: kakao.maps.Map) => {
       if (!map) return;
       const places = new kakao.maps.services.Places();
       const options = { page: 1 };
-      keyword += "반려동물";
+      console.log(keyword);
+      if (keyword === "") return;
+      keyword += " 반려동물";
       places.keywordSearch(
         keyword,
         (result, status, pagination) => {
@@ -85,6 +87,7 @@ const useMaps = (map?: kakao.maps.Map) => {
               setMarkerState(null);
               getCurrentPosition(setPositionCenter);
             }
+            setKeywordStorage(keyword);
           } else if (status == "ZERO_RESULT") {
             setMarkerState(null);
             getCurrentPosition(setPositionCenter);
@@ -95,7 +98,7 @@ const useMaps = (map?: kakao.maps.Map) => {
         options
       );
     },
-    [map, markerStateValue]
+    [map]
   );
 
   // 마커 클러스터링
