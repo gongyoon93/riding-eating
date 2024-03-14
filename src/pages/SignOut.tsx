@@ -28,8 +28,14 @@ const SignOut = () => {
       setUserState({ isLogin: false, uid: "", email: null, name: null });
       setWatchState({ watchId: 0 });
       setPositionState({
-        lat: 37.3595704,
-        lng: 127.105399,
+        user: {
+          lat: 37.3595704,
+          lng: 127.105399,
+        },
+        map: {
+          lat: 37.3595704,
+          lng: 127.105399,
+        },
       });
       setKeywordState({ keyword: "" });
       navigate("/");

@@ -1,4 +1,4 @@
-import useMaps from "@/hooks/useMaps";
+// import useMaps from "@/hooks/useMaps";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import useSetUserState from "@/hooks/useSetUserState";
 import { useNavigate } from "react-router-dom";
@@ -56,15 +56,15 @@ const Footer = () => {
     watchStateValue: { watchId },
   } = useSetMapsState();
 
-  const { watchPosition, clearWatch } = useMaps();
+  // const { watchPosition, clearWatch } = useMaps();
 
-  const changeWatchPosition = () => {
-    // if (watchId === 0) {
-    //   watchPosition();
-    // } else {
-    //   clearWatch(watchId);
-    // }
-  };
+  // const changeWatchPosition = () => {
+  // if (watchId === 0) {
+  //   watchPosition();
+  // } else {
+  //   clearWatch(watchId);
+  // }
+  // };
 
   return (
     <TabBar watchId={watchId}>

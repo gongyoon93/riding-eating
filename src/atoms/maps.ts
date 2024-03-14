@@ -1,8 +1,16 @@
 import { atom } from "recoil";
 
 interface PositionState {
-  lat: number;
-  lng: number;
+  //사용자 좌표
+  user: {
+    lat: number;
+    lng: number;
+  };
+  //지도 중심 좌표
+  map: {
+    lat: number;
+    lng: number;
+  };
 }
 
 interface MarkerState {
@@ -21,8 +29,14 @@ interface MarkerState {
 export const positionState = atom<PositionState>({
   key: "positionState",
   default: {
-    lat: 37.3595704,
-    lng: 127.105399,
+    user: {
+      lat: 37.3595704,
+      lng: 127.105399,
+    },
+    map: {
+      lat: 37.3595704,
+      lng: 127.105399,
+    },
   },
 });
 

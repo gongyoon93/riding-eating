@@ -8,51 +8,15 @@ import {
   CustomOverlayMap,
   ZoomControl,
   MapTypeControl,
-  MapMarker,
   // Polyline,
 } from "react-kakao-maps-sdk";
-import styled, { keyframes } from "styled-components";
-import markerGreen from "@/assets/images/marker_green.png";
-import markerRed from "@/assets/images/marker_red.png";
 import SearchPlaceList from "@/components/SearchPlaceList";
 import {
   MapContainer,
+  PlaceMarker,
   StyledPoistionButton,
+  UserMarker,
 } from "@/styled/maps/MapDefaultStyle";
-
-const blinkAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const StyledMarker = styled.div<{ watchId: number }>`
-  font-size: 1.5em;
-  width: 50px;
-  height: 50px;
-  border: none;
-  background: ${(props) =>
-      props.watchId === 0 ? `url(${markerGreen})` : `url(${markerRed})`}
-    transparent;
-  color: #000;
-  animation: ${blinkAnimation} 1s linear infinite;
-`;
-
-const Btn = styled.button`
-  cursor: pointer;
-  position: absolute;
-  z-index: 1031;
-  bottom: 120px;
-  right: 25px;
-  width: 45px;
-  height: 45px;
-`;
 
 function Map() {
   const [map, setMap] = useState<kakao.maps.Map>();
@@ -101,8 +65,8 @@ function Map() {
       <MapView
         isPanto={true}
         center={{
-          lat: positionStateValue.lat,
-          lng: positionStateValue.lng,
+          lat: positionStateValue.user.lat,
+          lng: positionStateValue.user.lng,
         }}
         style={{
           width: "100%",
@@ -129,30 +93,39 @@ function Map() {
         {/* 현재 위치 표시 */}
         <CustomOverlayMap
           position={{
-            lat: positionStateValue.lat,
-            lng: positionStateValue.lng,
+            lat: positionStateValue.user.lat,
+            lng: positionStateValue.user.lng,
           }}
           yAnchor={0.85}
         >
-          <StyledMarker watchId={0} />
+          <UserMarker watchId={0} />
         </CustomOverlayMap>
         {markerStateValue?.map((marker) => (
-          <MapMarker
+          <CustomOverlayMap
             key={`marker-${marker.place_name}-${marker.lat},${marker.lng}`}
             position={{ lat: marker.lat, lng: marker.lng }}
             // onClick={() => setInfo(marker)}
           >
-            {/* {info && info.content === marker.content && (
-            <div style={{color:"#000"}}>{marker.content}</div>
-          )} */}
-          </MapMarker>
+            <PlaceMarker
+              isOver={
+                positionStateValue.map.lat === marker.lat &&
+                positionStateValue.map.lng === marker.lng
+              }
+            />
+          </CustomOverlayMap>
         ))}
       </MapView>
       <SearchPlaceList map={map} />
       <StyledPoistionButton
-        onClick={() => getCurrentPosition(setPositionCenter)}
+        onClick={() =>
+          getCurrentPosition(() =>
+            setPositionCenter(
+              positionStateValue.user.lat,
+              positionStateValue.user.lng
+            )
+          )
+        }
       />
-      <Btn onClick={() => {}} />
       <Footer />
     </MapContainer>
   );

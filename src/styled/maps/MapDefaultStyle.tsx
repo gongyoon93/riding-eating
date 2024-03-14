@@ -1,5 +1,8 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import targetBlack from "@/assets/images/target_black.png";
+import markerGreen from "@/assets/images/marker_green.png";
+import markerRed from "@/assets/images/marker_red.png";
+import placeMarker_p from "@/assets/images/pet-shop.png";
 
 export const MapContainer = styled.section`
   display: flex;
@@ -30,4 +33,52 @@ export const StyledPoistionButton = styled.button`
     right: 15px;
     bottom: 62px;
   }
+`;
+
+// Blink Animation
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+// Shake Animation
+const shakeAnimation = keyframes`
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-5px, 0) rotate(-8deg); }
+  50% { transform: translate(0, 0) rotate(0deg); }
+  75% { transform: translate(5px, 0) rotate(8deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+`;
+
+export const UserMarker = styled.div<{ watchId: number }>`
+  font-size: 1.5em;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: ${(props) =>
+      props.watchId === 0 ? `url(${markerGreen})` : `url(${markerRed})`}
+    transparent;
+  color: #000;
+  animation: ${blinkAnimation} 1s linear infinite;
+`;
+
+export const PlaceMarker = styled.div<{ isOver: boolean }>`
+  font-size: 1.5em;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: url(${placeMarker_p}) center/50px 50px transparent;
+  animation: ${({ isOver }) =>
+    isOver
+      ? css`
+          ${shakeAnimation} 1s linear infinite
+        `
+      : "none"};
 `;

@@ -9,10 +9,21 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 const useSetMapsState = () => {
   const setPositionState = useSetRecoilState(positionState);
   const positionStateValue = useRecoilValue(positionState);
-  const setCurrentPositionStorage = (lat: number, lng: number) => {
+  const setCurrentPositionStorage = (
+    userLat: number,
+    userLng: number,
+    mapLat: number,
+    mapLng: number
+  ) => {
     const positionState = {
-      lat,
-      lng,
+      user: {
+        lat: userLat,
+        lng: userLng,
+      },
+      map: {
+        lat: mapLat,
+        lng: mapLng,
+      },
     };
     localStorage.setItem("currentPositionState", JSON.stringify(positionState));
   };

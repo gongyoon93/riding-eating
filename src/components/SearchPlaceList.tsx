@@ -15,15 +15,17 @@ const CountPerPage = styled.ul``;
 
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const {
+    positionStateValue,
     keywordStateValue: { keyword },
     setKeywordState,
     markerStateValue,
   } = useSetMapsState();
-  const { searchPlaces } = useMaps(map);
+  const { setPositionPanTo, searchPlaces } = useMaps(map);
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     searchPlaces(keyword);
   };
+
   return (
     <SearchContainer onSubmit={onSubmit}>
       <SearchInput
@@ -35,13 +37,20 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
       />
       <PlaceList>
         {markerStateValue?.map((mark) => (
-          <PlaceMarkerList key={`장소 목록-${mark.id}`}>
-            <PMLIcon />
+          <PlaceMarkerList
+            key={`장소 목록-${mark.id}`}
+            onClick={() => setPositionPanTo(mark.lat, mark.lng)}
+            isClick={
+              positionStateValue.map.lat === mark.lat &&
+              positionStateValue.map.lng === mark.lng
+            }
+          >
             <PMLContents>
               <p>{mark.place_name}</p>
               <p>{mark.road_address_name}</p>
               <p>{mark.phone}</p>
             </PMLContents>
+            <PMLIcon />
           </PlaceMarkerList>
         ))}
       </PlaceList>

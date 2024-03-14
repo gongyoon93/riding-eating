@@ -13,13 +13,35 @@ const useMaps = (map?: kakao.maps.Map) => {
     setWatchStorage,
   } = useSetMapsState();
 
-  // 지도 중심 좌표 이동
-  const setPositionCenter = useCallback(() => {
-    if (!map) return;
-    map.setCenter(
-      new kakao.maps.LatLng(positionStateValue.lat, positionStateValue.lng)
-    );
-  }, [map, positionStateValue]);
+  // 지도 중심 좌표 바로 이동 (유저)
+  const setPositionCenter = useCallback(
+    (lat: number, lng: number) => {
+      if (!map) return;
+      map.setCenter(new kakao.maps.LatLng(lat, lng));
+      setPositionState((pre) => ({ ...pre, map: { lat, lng } }));
+    },
+    [map]
+  );
+
+  // 지도 중심 좌표 부드럽게 이동 (마커)
+  const setPositionPanTo = useCallback(
+    (lat: number, lng: number) => {
+      if (!map) return;
+      map.panTo(new kakao.maps.LatLng(lat, lng));
+      if (
+        lat === positionStateValue.map.lat &&
+        lng === positionStateValue.map.lng
+      ) {
+        setPositionState((pre) => ({
+          ...pre,
+          map: { lat: 37.3595704, lng: 127.105399 },
+        }));
+      } else {
+        setPositionState((pre) => ({ ...pre, map: { lat, lng } }));
+      }
+    },
+    [map, positionStateValue]
+  );
 
   // 사용자의 현재 위치로 상태 업데이트
   const getCurrentPosition = (centerFn: () => void) => {
@@ -28,12 +50,15 @@ const useMaps = (map?: kakao.maps.Map) => {
         (position) => {
           const { latitude, longitude } = position.coords;
           if (
-            positionStateValue.lat === latitude &&
-            positionStateValue.lng === longitude
+            positionStateValue.user.lat === latitude &&
+            positionStateValue.user.lng === longitude
           ) {
             centerFn();
           } else {
-            setPositionState({ lat: latitude, lng: longitude });
+            setPositionState({
+              user: { lat: latitude, lng: longitude },
+              map: { lat: latitude, lng: longitude },
+            });
           }
         },
         (error) => {
@@ -52,7 +77,6 @@ const useMaps = (map?: kakao.maps.Map) => {
       if (!map) return;
       const places = new kakao.maps.services.Places();
       const options = { page: 1 };
-      console.log(keyword);
       if (keyword === "") return;
       keyword += " 반려동물";
       places.keywordSearch(
@@ -72,8 +96,7 @@ const useMaps = (map?: kakao.maps.Map) => {
               lng: +item.x,
               id: +item.id,
             }));
-
-            console.log(markers);
+            // console.log(markers);
             if (markers.length !== 0) {
               setMarkerState(markers);
 
@@ -85,12 +108,22 @@ const useMaps = (map?: kakao.maps.Map) => {
               map.setBounds(bounds);
             } else {
               setMarkerState(null);
-              getCurrentPosition(setPositionCenter);
+              getCurrentPosition(() =>
+                setPositionCenter(
+                  positionStateValue.user.lat,
+                  positionStateValue.user.lng
+                )
+              );
             }
             setKeywordStorage(keyword);
           } else if (status == "ZERO_RESULT") {
             setMarkerState(null);
-            getCurrentPosition(setPositionCenter);
+            getCurrentPosition(() =>
+              setPositionCenter(
+                positionStateValue.user.lat,
+                positionStateValue.user.lng
+              )
+            );
           } else {
             console.log("SearchPlaces Error");
           }
@@ -117,14 +150,14 @@ const useMaps = (map?: kakao.maps.Map) => {
         const distance = getDistance(
           { latitude, longitude },
           {
-            latitude: positionStateValue.lat,
-            longitude: positionStateValue.lng,
+            latitude: positionStateValue.user.lat,
+            longitude: positionStateValue.user.lng,
           }
         );
         if (distance > 25) {
           setPositionState({
-            lat: latitude,
-            lng: longitude,
+            user: { lat: latitude, lng: longitude },
+            map: { lat: latitude, lng: longitude },
           });
         }
       },
@@ -141,6 +174,7 @@ const useMaps = (map?: kakao.maps.Map) => {
   };
   return {
     setPositionCenter,
+    setPositionPanTo,
     getCurrentPosition,
     searchPlaces,
     watchPosition,
