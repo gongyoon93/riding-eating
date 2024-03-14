@@ -68,12 +68,11 @@ export const SearchInput = styled(({ ...parentsProps }) => (
     border-radius: 4px;
     padding: 0 10px;
     font-size: 1.1em;
+    background: none;
   }
 `;
 
-export const SearchMoreIcon = styled(({ ...parentProps }) => (
-  <FormContainer.Button {...parentProps} />
-))<{ isBtnOpen: boolean }>`
+export const SearchMoreIcon = styled.div<{ isBtnOpen: boolean }>`
   flex-shrink: 0;
   width: 46px;
   height: 46px;
@@ -131,8 +130,8 @@ export const SearchMoreValue = styled.li`
   }
 `;
 
-export const PlaceList = styled.ul`
-  /* margin: 10px 10px; */
+export const PlaceList = styled.ul<{ hasNextPage?: boolean }>`
+  position: relative;
   width: 100%;
   flex: 1;
   overflow-y: auto;
@@ -142,10 +141,11 @@ export const PlaceList = styled.ul`
     display: none;
   }
   border: none;
-  border-radius: 4px;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.2),
-    0 -1px 0px rgba(0, 0, 0, 0.02);
+  border-radius: ${({ hasNextPage }) => (hasNextPage ? "4px 4px 0 0" : "4px")};
+  box-shadow: ${({ hasNextPage }) =>
+    hasNextPage
+      ? "none"
+      : "0 2px 4px rgba(0, 0, 0, 0.2),0 -1px 0px rgba(0, 0, 0, 0.02)"};
 `;
 
 export const PlaceMarkerList = styled.li<{ isClick: boolean }>`
@@ -206,4 +206,38 @@ export const PMLIcon = styled.div`
   @media screen and (max-width: 768px) {
     width: 40px;
   }
+`;
+
+export const Pagination = styled.div`
+  position: sticky;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  @media screen and (max-width: 768px) {
+    width: 180px;
+  }
+  @media screen and (min-width: 1281px) {
+    width: 420px;
+  }
+  ul {
+    width: auto;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+  }
+`;
+
+export const PaginationNumber = styled.li<{ currentPage: boolean }>`
+  cursor: pointer;
+  width: 30px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 13px;
+  color: ${({ currentPage, theme }) =>
+    currentPage ? theme.color.second : "inherit"};
 `;

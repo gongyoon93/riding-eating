@@ -1,4 +1,3 @@
-import Footer from "@/components/Footer";
 import useMaps from "@/hooks/useMaps";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import { useEffect, useState } from "react";
@@ -119,7 +118,7 @@ function Map() {
           onClusterclick={(target, cluster) => onClusterZoom(target, cluster)}
         > */}
         {/* 장소 마커 위치 표시 */}
-        {markerStateValue?.map((marker) => (
+        {markerStateValue?.marker.map((marker) => (
           <CustomOverlayMap
             key={`marker-${marker.place_name}-${marker.lat},${marker.lng}`}
             position={{ lat: marker.lat, lng: marker.lng }}
@@ -146,7 +145,6 @@ function Map() {
           )
         }
       />
-      <Footer />
     </MapContainer>
   );
 }

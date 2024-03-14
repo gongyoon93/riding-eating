@@ -115,7 +115,7 @@ const useMaps = (map?: kakao.maps.Map) => {
             }));
             // console.log(markers);
             if (markers.length !== 0) {
-              setMarkerState(markers);
+              setMarkerState({ marker: markers, page: pagination });
 
               const bounds = new kakao.maps.LatLngBounds();
               markers.forEach((marker) =>

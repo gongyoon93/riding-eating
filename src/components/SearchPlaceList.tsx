@@ -1,9 +1,11 @@
-import styled from "styled-components";
 import React, { useState } from "react";
 import useSetMapsState from "@/hooks/useSetMapsState";
+import useSetUserState from "@/hooks/useSetUserState";
 import {
   PMLContents,
   PMLIcon,
+  Pagination,
+  PaginationNumber,
   PlaceList,
   PlaceMarkerList,
   SearchContainer,
@@ -14,11 +16,14 @@ import {
   SearchMoreValue,
 } from "@/styled/maps/MapSearchStyle";
 import useMaps from "@/hooks/useMaps";
-
-const CountPerPage = styled.ul``;
+import { useNavigate } from "react-router-dom";
 
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
+  const navigate = useNavigate();
   const [isBtnOpen, setIsBtnOpen] = useState(false);
+  const {
+    userStateValue: { isLogin },
+  } = useSetUserState();
   const {
     positionStateValue,
     keywordStateValue: { keyword },
@@ -29,10 +34,6 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     searchPlaces(keyword);
-  };
-  const clickMoreIcon = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsBtnOpen(!isBtnOpen);
   };
 
   return (
@@ -47,7 +48,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
         />
         <SearchMoreIcon
           isBtnOpen={isBtnOpen}
-          onClick={(e: React.FormEvent<HTMLFormElement>) => clickMoreIcon(e)}
+          onClick={() => setIsBtnOpen(!isBtnOpen)}
         />
         {isBtnOpen && (
           <SearchMoreSelect
@@ -56,15 +57,19 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
           >
             <SearchMoreValue>목록 닫기</SearchMoreValue>
             <SearchMoreValue>나의 정보</SearchMoreValue>
-            <SearchMoreValue>로그아웃</SearchMoreValue>
+            {isLogin && (
+              <SearchMoreValue onClick={() => navigate("/signout")}>
+                로그아웃
+              </SearchMoreValue>
+            )}
           </SearchMoreSelect>
         )}
       </SearchHeader>
 
-      <PlaceList>
-        {markerStateValue?.map((mark) => (
+      <PlaceList hasNextPage={(markerStateValue?.page.last ?? 0) > 1}>
+        {markerStateValue?.marker.map((mark) => (
           <PlaceMarkerList
-            key={`장소 목록-${mark.id}`}
+            key={`Place-Marker-List-${mark.id}`}
             onClick={() => setPositionPanTo(mark.lat, mark.lng)}
             isClick={
               positionStateValue.map.lat === mark.lat &&
@@ -80,7 +85,29 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
           </PlaceMarkerList>
         ))}
       </PlaceList>
-      <CountPerPage />
+
+      {(markerStateValue?.page.last ?? 0) > 1 && (
+        <Pagination>
+          <ul>
+            {Array.from(
+              {
+                length: Math.ceil(
+                  (markerStateValue?.page.totalCount ?? 0) / 15
+                ),
+              },
+              (_, index) => index + 1
+            ).map((pageNumber) => (
+              <PaginationNumber
+                key={"PaginationNumber" + pageNumber}
+                currentPage={pageNumber === markerStateValue?.page.current}
+                onClick={() => markerStateValue?.page.gotoPage(pageNumber)}
+              >
+                {pageNumber}
+              </PaginationNumber>
+            ))}
+          </ul>
+        </Pagination>
+      )}
     </SearchContainer>
   );
 });

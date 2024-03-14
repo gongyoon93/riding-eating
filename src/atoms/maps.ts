@@ -13,7 +13,7 @@ interface PositionState {
   };
 }
 
-interface MarkerState {
+interface MarkerData {
   address_name: string;
   road_address_name: string;
   category_group_name: string;
@@ -24,6 +24,26 @@ interface MarkerState {
   lat: number;
   lng: number;
   id: number;
+}
+
+interface PageData {
+  current: number;
+  first: number;
+  gotoFirst(): void;
+  gotoLast(): void;
+  gotoPage(page: number): void;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  last: number;
+  nextPage(): void;
+  prevPage(): void;
+  perPage?: number;
+  totalCount: number;
+}
+
+interface MarkerState {
+  marker: MarkerData[];
+  page: PageData;
 }
 
 export const positionState = atom<PositionState>({
@@ -47,7 +67,7 @@ export const watchState = atom<{ watchId: number }>({
   },
 });
 
-export const markerState = atom<MarkerState[] | null>({
+export const markerState = atom<MarkerState | null>({
   key: "markerState",
   default: null,
 });

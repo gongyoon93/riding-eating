@@ -15,7 +15,7 @@ export const StyledPoistionButton = styled.button`
   cursor: pointer;
   position: absolute;
   z-index: 1031;
-  bottom: 70px;
+  bottom: 25px;
   right: 25px;
   width: 45px;
   height: 45px;
