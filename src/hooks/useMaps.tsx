@@ -71,6 +71,23 @@ const useMaps = (map?: kakao.maps.Map) => {
     }
   };
 
+  // 클러스터링 확대
+  const onClusterZoom = useCallback(() => {
+    (target: kakao.maps.MarkerClusterer, cluster: kakao.maps.Cluster) => {
+      if (!map) return;
+      const level = map.getLevel() - 1;
+      map.setLevel(level, { anchor: cluster.getCenter() });
+      console.log(cluster.getCenter(), cluster.getCenter().getLng());
+      setPositionState((pre) => ({
+        ...pre,
+        map: {
+          lat: cluster.getCenter().getLat(),
+          lng: cluster.getCenter().getLng(),
+        },
+      }));
+    };
+  }, [map]);
+
   // 키워드로 장소 검색
   const searchPlaces = useCallback(
     (keyword: string) => {
@@ -134,8 +151,6 @@ const useMaps = (map?: kakao.maps.Map) => {
     [map]
   );
 
-  // 마커 클러스터링
-
   const watchPosition = () => {
     //watchId:0 값으로 기록 중 중지 여부를 확인
     const watchPositionId = navigator.geolocation.watchPosition(
@@ -176,6 +191,7 @@ const useMaps = (map?: kakao.maps.Map) => {
     setPositionCenter,
     setPositionPanTo,
     getCurrentPosition,
+    onClusterZoom,
     searchPlaces,
     watchPosition,
     clearWatch,

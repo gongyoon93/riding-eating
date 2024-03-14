@@ -8,6 +8,7 @@ import {
   CustomOverlayMap,
   ZoomControl,
   MapTypeControl,
+  MarkerClusterer,
   // Polyline,
 } from "react-kakao-maps-sdk";
 import SearchPlaceList from "@/components/SearchPlaceList";
@@ -23,6 +24,7 @@ function Map() {
   const {
     positionStateValue,
     markerStateValue,
+    setMarkerState,
     keywordStateValue: { keyword },
     setKeywordState,
     // watchStateValue: { watchId },
@@ -33,7 +35,8 @@ function Map() {
     libraries: ["clusterer", "services"],
   });
 
-  const { setPositionCenter, getCurrentPosition, searchPlaces } = useMaps(map);
+  const { setPositionCenter, getCurrentPosition, onClusterZoom, searchPlaces } =
+    useMaps(map);
 
   useEffect(() => {
     // const watchState = localStorage.getItem("watchState");
@@ -51,8 +54,17 @@ function Map() {
   useEffect(() => {
     if (!loading && map) {
       console.log("loaded");
-      // getCurrentPosition(setPositionCenter);
-      searchPlaces(keyword);
+      if (keyword === "") {
+        getCurrentPosition(() =>
+          setPositionCenter(
+            positionStateValue.user.lat,
+            positionStateValue.user.lng
+          )
+        );
+        setMarkerState(null);
+      } else {
+        searchPlaces(keyword);
+      }
     }
     if (error) {
       console.log(error);
@@ -90,7 +102,7 @@ function Map() {
         <ZoomControl position={"RIGHT"} />
         <MapTypeControl position={"TOPRIGHT"} />
 
-        {/* 현재 위치 표시 */}
+        {/* 사용자 현재 위치 표시 */}
         <CustomOverlayMap
           position={{
             lat: positionStateValue.user.lat,
@@ -100,6 +112,13 @@ function Map() {
         >
           <UserMarker watchId={0} />
         </CustomOverlayMap>
+        {/* <MarkerClusterer
+          averageCenter={true}
+          minLevel={5}
+          disableClickZoom={true}
+          onClusterclick={(target, cluster) => onClusterZoom(target, cluster)}
+        > */}
+        {/* 장소 마커 위치 표시 */}
         {markerStateValue?.map((marker) => (
           <CustomOverlayMap
             key={`marker-${marker.place_name}-${marker.lat},${marker.lng}`}
@@ -114,6 +133,7 @@ function Map() {
             />
           </CustomOverlayMap>
         ))}
+        {/* </MarkerClusterer> */}
       </MapView>
       <SearchPlaceList map={map} />
       <StyledPoistionButton

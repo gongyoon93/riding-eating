@@ -1,5 +1,8 @@
 import FormContainer from "@/components/FormContainer";
 import styled from "styled-components";
+import more_off from "@/assets/images/more_off.png";
+import search from "@/assets/images/search.png";
+import double_right from "@/assets/images/double_right.png";
 
 export const SearchContainer = styled(({ ...parentsProps }) => (
   <FormContainer {...parentsProps} />
@@ -15,7 +18,6 @@ export const SearchContainer = styled(({ ...parentsProps }) => (
   height: auto;
   max-height: 700px;
   background: #ffffff;
-  overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
@@ -35,13 +37,24 @@ export const SearchContainer = styled(({ ...parentsProps }) => (
   }
 `;
 
-export const SearchInput = styled(({ ...parentsProps }) => (
-  <FormContainer.Input {...parentsProps} />
-))`
+export const SearchHeader = styled.div`
+  display: flex;
+  flex-direction: row;
   flex-shrink: 0;
   width: calc(100% - 10px);
   height: 50px;
   margin: 5px 5px;
+  @media screen and (max-width: 768px) {
+    height: 35px;
+  }
+`;
+
+export const SearchInput = styled(({ ...parentsProps }) => (
+  <FormContainer.Input {...parentsProps} />
+))`
+  flex: 1;
+  width: 100%;
+  height: 100%;
   padding: 0 20px 0 50px;
   border-radius: 15px;
   border: none;
@@ -50,13 +63,71 @@ export const SearchInput = styled(({ ...parentsProps }) => (
     0 -1px 0px rgba(0, 0, 0, 0.02);
   outline: none;
   font-size: 1.4em;
+  background: url(${search}) 18px 14px/22px 22px no-repeat;
   @media screen and (max-width: 768px) {
-    width: calc(100% - 10px);
-    height: 35px;
-    margin: 5px 5px;
     border-radius: 4px;
     padding: 0 10px;
     font-size: 1.1em;
+  }
+`;
+
+export const SearchMoreIcon = styled(({ ...parentProps }) => (
+  <FormContainer.Button {...parentProps} />
+))<{ isBtnOpen: boolean }>`
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  border: 2px solid ${({ theme }) => theme.color.second};
+  background: ${({ isBtnOpen }) =>
+    isBtnOpen
+      ? `url(${double_right}) center/30px 30px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`
+      : `url(${more_off}) center/30px 30px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`};
+  transition: background-image 2s ease;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 -1px 0px rgba(0, 0, 0, 0.02);
+  margin: 2px 2px 2px 8px;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    width: 31px;
+    height: 31px;
+    background: ${({ isBtnOpen }) =>
+      isBtnOpen
+        ? `url(${double_right}) center/20px 20px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`
+        : `url(${more_off}) center/20px 20px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`};
+  }
+`;
+
+export const SearchMoreSelect = styled.ul<{ isBtnOpen: boolean }>`
+  position: absolute;
+  right: -105px;
+  top: 0;
+  display: ${({ isBtnOpen }) => (isBtnOpen ? "flex" : "none")};
+  opacity: ${({ isBtnOpen }) => (isBtnOpen ? "1" : "0")};
+  transition: opacity 0.3s ease-in-out;
+  flex-direction: column;
+  width: 100px;
+  height: 100px;
+  background: #ffffff;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
+`;
+
+export const SearchMoreValue = styled.li`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100&;
+  flex: 1;
+  font-weight: 600;
+  font-size: 1.1em;
+  cursor: pointer;
+  &:hover {
+    background: linear-gradient(to right, #59ce8f, #83f298);
+    color: #ffffff;
   }
 `;
 
@@ -90,10 +161,9 @@ export const PlaceMarkerList = styled.li<{ isClick: boolean }>`
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.2),
     0 -1px 0px rgba(0, 0, 0, 0.02);
-  transition: border-color 0.3s ease; /* hover 효과를 위한 트랜지션 */
+  transition: border-color 0.3s ease;
   &:hover {
-    border-color: ${({ theme }) =>
-      theme.color.second}; /* hover 시 변경되는 border 색상 */
+    border-color: ${({ theme }) => theme.color.second};
     background: linear-gradient(to top, #59ce8f, #83f298);
   }
   border-color: ${({ isClick, theme }) =>

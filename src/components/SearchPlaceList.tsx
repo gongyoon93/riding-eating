@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useState } from "react";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import {
   PMLContents,
@@ -7,13 +7,18 @@ import {
   PlaceList,
   PlaceMarkerList,
   SearchContainer,
+  SearchHeader,
   SearchInput,
+  SearchMoreIcon,
+  SearchMoreSelect,
+  SearchMoreValue,
 } from "@/styled/maps/MapSearchStyle";
 import useMaps from "@/hooks/useMaps";
 
 const CountPerPage = styled.ul``;
 
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
+  const [isBtnOpen, setIsBtnOpen] = useState(false);
   const {
     positionStateValue,
     keywordStateValue: { keyword },
@@ -25,16 +30,37 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
     e.preventDefault();
     searchPlaces(keyword);
   };
+  const clickMoreIcon = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsBtnOpen(!isBtnOpen);
+  };
 
   return (
     <SearchContainer onSubmit={onSubmit}>
-      <SearchInput
-        placeholder="장소를 검색하세요."
-        value={keyword}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          setKeywordState({ keyword: event.currentTarget.value })
-        }
-      />
+      <SearchHeader>
+        <SearchInput
+          placeholder="장소를 검색하세요."
+          value={keyword}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setKeywordState({ keyword: event.currentTarget.value })
+          }
+        />
+        <SearchMoreIcon
+          isBtnOpen={isBtnOpen}
+          onClick={(e: React.FormEvent<HTMLFormElement>) => clickMoreIcon(e)}
+        />
+        {isBtnOpen && (
+          <SearchMoreSelect
+            isBtnOpen={isBtnOpen}
+            onMouseLeave={() => setIsBtnOpen(!isBtnOpen)}
+          >
+            <SearchMoreValue>목록 닫기</SearchMoreValue>
+            <SearchMoreValue>나의 정보</SearchMoreValue>
+            <SearchMoreValue>로그아웃</SearchMoreValue>
+          </SearchMoreSelect>
+        )}
+      </SearchHeader>
+
       <PlaceList>
         {markerStateValue?.map((mark) => (
           <PlaceMarkerList

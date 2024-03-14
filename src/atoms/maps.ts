@@ -49,20 +49,7 @@ export const watchState = atom<{ watchId: number }>({
 
 export const markerState = atom<MarkerState[] | null>({
   key: "markerState",
-  default: [
-    {
-      address_name: "",
-      road_address_name: "",
-      category_group_name: "",
-      category_name: "",
-      phone: "",
-      place_name: "",
-      place_url: "",
-      lat: 37.3595704,
-      lng: 127.105399,
-      id: 0,
-    },
-  ],
+  default: null,
 });
 
 export const keywordState = atom<{ keyword: string }>({
