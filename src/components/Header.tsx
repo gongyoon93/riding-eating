@@ -64,14 +64,9 @@ const Header = () => {
             </li>
           )} */}
           {!isLogin && (
-            <>
-              <li>
-                <Link to="/auth/signin">로그인</Link>
-              </li>
-              <li>
-                <Link to="/auth/signup">회원가입</Link>
-              </li>
-            </>
+            <li>
+              <Link to="/auth/signup">회원가입</Link>
+            </li>
           )}
         </ul>
       </nav>

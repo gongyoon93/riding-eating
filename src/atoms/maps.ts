@@ -6,7 +6,7 @@ interface PositionState {
     lat: number;
     lng: number;
   };
-  //지도 중심 좌표
+  //지도 중심 좌표 or 기준 마커 좌표
   map: {
     lat: number;
     lng: number;

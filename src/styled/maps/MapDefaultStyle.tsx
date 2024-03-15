@@ -5,10 +5,11 @@ import markerRed from "@/assets/images/marker_red.png";
 import placeMarker_p from "@/assets/images/pet-shop.png";
 
 export const MapContainer = styled.section`
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh; /* 화면 전체 높이 */
-  position: relative;
+  overflow: hidden;
 `;
 
 export const StyledPoistionButton = styled.button`
@@ -30,8 +31,8 @@ export const StyledPoistionButton = styled.button`
     background: url(${targetBlack}) center/22px 22px no-repeat #ffffff;
     width: 35px;
     height: 35px;
-    right: 15px;
-    bottom: 62px;
+    right: 10px;
+    bottom: 10px;
   }
 `;
 
@@ -81,4 +82,5 @@ export const PlaceMarker = styled.div<{ isOver: boolean }>`
           ${shakeAnimation} 1s linear infinite
         `
       : "none"};
+  cursor: pointer;
 `;

@@ -12,6 +12,7 @@ import {
   AuthTitleLabel,
 } from "@/styled/form/FormDefaultStyle";
 import { ErrorLabel } from "@/styled/form/FormErrorStyle";
+import fashong from "@/assets/images/fashong.png";
 
 export default function SignIn() {
   const {
@@ -50,9 +51,10 @@ export default function SignIn() {
 
   return (
     <Wrapper>
-      <FormContainer onSubmit={onSubmit}>
+      <Icon />
+      <Container onSubmit={onSubmit}>
         <AuthTitleLabel htmlFor="email">이메일</AuthTitleLabel>
-        <AuthInput
+        <Input
           isEmail={isEmail}
           type="text"
           id="email"
@@ -65,7 +67,7 @@ export default function SignIn() {
           이메일의 형식이 아닙니다.
         </ErrorLabel>
         <AuthTitleLabel htmlFor="password">비밀번호</AuthTitleLabel>
-        <AuthInput
+        <Input
           type="password"
           id="password"
           name="password"
@@ -77,7 +79,7 @@ export default function SignIn() {
           비밀번호는 8자 이상 입력해야합니다.
         </ErrorLabel>
         <AuthButton disabled={isDisabled}>로그인</AuthButton>
-      </FormContainer>
+      </Container>
     </Wrapper>
   );
 }
@@ -94,4 +96,31 @@ const Wrapper = styled.div`
     ${({ theme }) => theme.mixin.form()};
     width: 80%;
   }
+`;
+
+const Icon = styled.div`
+  width: 80%;
+  height: 150px;
+  margin-bottom: 30px;
+  background: url(${fashong}) center/140px 140px no-repeat;
+  @media screen and (max-width: 768px) {
+    height: 100px;
+    margin-bottom: 30px;
+    background: url(${fashong}) center/100px 100px no-repeat;
+  }
+`;
+
+const Container = styled(({ ...parentProps }) => (
+  <FormContainer {...parentProps}></FormContainer>
+))`
+  padding: 40px 30px;
+  border-radius: 10px;
+  border: 2px solid ${({ theme }) => theme.color.second};
+`;
+
+const Input = styled(({ ...parentProps }) => (
+  <AuthInput {...parentProps}></AuthInput>
+))`
+  width: 100%;
+  margin-top: 1rem;
 `;

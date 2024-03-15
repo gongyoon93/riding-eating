@@ -3,10 +3,12 @@ import styled from "styled-components";
 import more_off from "@/assets/images/more_off.png";
 import search from "@/assets/images/search.png";
 import double_right from "@/assets/images/double_right.png";
+import review from "@/assets/images/review.png";
+import visit from "@/assets/images/visit.png";
 
 export const SearchContainer = styled(({ ...parentsProps }) => (
   <FormContainer {...parentsProps} />
-))`
+))<{ isListOpen: boolean }>`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -14,26 +16,29 @@ export const SearchContainer = styled(({ ...parentsProps }) => (
   top: 3px;
   left: 3px;
   width: 350px;
-  min-height: 50px;
-  height: auto;
-  max-height: 700px;
+  min-height: ${({ isListOpen }) => (isListOpen ? "auto" : "60px")};
+  height: ${({ isListOpen }) => (isListOpen ? "auto" : "60px")};
+  max-height: ${({ isListOpen }) => (isListOpen ? "700px" : "60px")};
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
-  transition: opacity 0.3s ease-in;
+  transition:
+    height 0.3s ease-in-out,
+    opacity 0.3s ease-in;
   opacity: 0.5;
   &:hover {
     opacity: 1;
   }
   @media screen and (max-width: 768px) {
     width: 180px;
-    min-height: 35px;
-    max-height: 450px;
+    min-height: ${({ isListOpen }) => (isListOpen ? "auto" : "45px")};
+    height: ${({ isListOpen }) => (isListOpen ? "auto" : "45px")};
+    max-height: ${({ isListOpen }) => (isListOpen ? "450px" : "45px")};
   }
   @media screen and (min-width: 1281px) {
     width: 420px;
-    max-height: 820px;
+    max-height: ${({ isListOpen }) => (isListOpen ? "820px" : "35px")};
   }
 `;
 
@@ -86,7 +91,7 @@ export const SearchMoreIcon = styled.div<{ isBtnOpen: boolean }>`
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.2),
     0 -1px 0px rgba(0, 0, 0, 0.02);
-  margin: 2px 2px 2px 8px;
+  margin: 1px 2px 2px 8px;
   cursor: pointer;
   @media screen and (max-width: 768px) {
     width: 31px;
@@ -130,7 +135,9 @@ export const SearchMoreValue = styled.li`
   }
 `;
 
-export const PlaceList = styled.ul<{ hasNextPage?: boolean }>`
+export const PlaceList = styled.ul<{
+  hasMultiPage?: boolean;
+}>`
   position: relative;
   width: 100%;
   flex: 1;
@@ -141,9 +148,10 @@ export const PlaceList = styled.ul<{ hasNextPage?: boolean }>`
     display: none;
   }
   border: none;
-  border-radius: ${({ hasNextPage }) => (hasNextPage ? "4px 4px 0 0" : "4px")};
-  box-shadow: ${({ hasNextPage }) =>
-    hasNextPage
+  border-radius: ${({ hasMultiPage }) =>
+    hasMultiPage ? "4px 4px 0 0" : "4px"};
+  box-shadow: ${({ hasMultiPage }) =>
+    hasMultiPage
       ? "none"
       : "0 2px 4px rgba(0, 0, 0, 0.2),0 -1px 0px rgba(0, 0, 0, 0.02)"};
 `;
@@ -176,7 +184,8 @@ export const PlaceMarkerList = styled.li<{ isClick: boolean }>`
 `;
 
 export const PMLContents = styled.div`
-  flex: 1;
+  /* flex: 1; */
+  width: calc(100% - 65px);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -186,12 +195,17 @@ export const PMLContents = styled.div`
   font-optical-sizing: auto;
   font-style: normal;
   p {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     padding-bottom: 3px;
     &:first-child {
       font-size: 1.35em;
     }
   }
   @media screen and (max-width: 768px) {
+    width: calc(100% - 50px);
     font-size: 1.2em;
     p:first-child {
       font-size: 1.25em;
@@ -203,8 +217,31 @@ export const PMLIcon = styled.div`
   flex-shrink: 0;
   width: 65px;
   height: 100%;
+  display: grid;
+  grid-template-rows: repeat(2, 1fr); /* 2개의 행을 생성 */
+  grid-template-columns: repeat(2, 1fr); /* 1개의 열을 생성 */
   @media screen and (max-width: 768px) {
     width: 40px;
+  }
+`;
+
+export const PMLIconBox = styled.div`
+  &:first-child {
+    background: url(${visit}) center/20px 20px no-repeat;
+  }
+  &:nth-child(2) {
+    background: url(${review}) center/20px 20px no-repeat;
+  }
+  &:nth-child(3) {
+    grid-column: span 2;
+  }
+  @media screen and (max-width: 768px) {
+    &:first-child {
+      background: url(${visit}) center/16px 16px no-repeat;
+    }
+    &:nth-child(2) {
+      background: url(${review}) center/16px 16px no-repeat;
+    }
   }
 `;
 

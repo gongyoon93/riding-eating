@@ -4,6 +4,7 @@ import useSetUserState from "@/hooks/useSetUserState";
 import {
   PMLContents,
   PMLIcon,
+  PMLIconBox,
   Pagination,
   PaginationNumber,
   PlaceList,
@@ -21,23 +22,37 @@ import { useNavigate } from "react-router-dom";
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const navigate = useNavigate();
   const [isBtnOpen, setIsBtnOpen] = useState(false);
+  const [isListOpen, setIsListOpen] = useState(true);
   const {
     userStateValue: { isLogin },
   } = useSetUserState();
   const {
     positionStateValue,
+    setPositionState,
     keywordStateValue: { keyword },
     setKeywordState,
     markerStateValue,
   } = useSetMapsState();
   const { setPositionPanTo, searchPlaces } = useMaps(map);
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     searchPlaces(keyword);
   };
+  const goToPage = (pageNumber: number) => {
+    markerStateValue?.page.gotoPage(pageNumber);
+    setPositionState((pre) => ({
+      ...pre,
+      map: { lat: 37.3595704, lng: 127.105399 },
+    }));
+  };
+  const toggleSearchList = () => {
+    setIsListOpen(!isListOpen);
+    setIsBtnOpen(false);
+  };
 
   return (
-    <SearchContainer onSubmit={onSubmit}>
+    <SearchContainer onSubmit={onSubmit} isListOpen={isListOpen}>
       <SearchHeader>
         <SearchInput
           placeholder="장소를 검색하세요."
@@ -53,9 +68,11 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
         {isBtnOpen && (
           <SearchMoreSelect
             isBtnOpen={isBtnOpen}
-            onMouseLeave={() => setIsBtnOpen(!isBtnOpen)}
+            onMouseLeave={() => setIsBtnOpen(false)}
           >
-            <SearchMoreValue>목록 닫기</SearchMoreValue>
+            <SearchMoreValue onClick={toggleSearchList}>
+              {isListOpen ? "목록 닫기" : "목록 열기"}
+            </SearchMoreValue>
             <SearchMoreValue>나의 정보</SearchMoreValue>
             {isLogin && (
               <SearchMoreValue onClick={() => navigate("/signout")}>
@@ -66,7 +83,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
         )}
       </SearchHeader>
 
-      <PlaceList hasNextPage={(markerStateValue?.page.last ?? 0) > 1}>
+      <PlaceList hasMultiPage={(markerStateValue?.page.last ?? 0) > 1}>
         {markerStateValue?.marker.map((mark) => (
           <PlaceMarkerList
             key={`Place-Marker-List-${mark.id}`}
@@ -77,16 +94,20 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
             }
           >
             <PMLContents>
-              <p>{mark.place_name}</p>
-              <p>{mark.road_address_name}</p>
-              <p>{mark.phone}</p>
+              <p title={mark.place_name}>{mark.place_name}</p>
+              <p title={mark.road_address_name}>{mark.road_address_name}</p>
+              <p title={mark.phone}>{mark.phone}</p>
             </PMLContents>
-            <PMLIcon />
+            <PMLIcon>
+              <PMLIconBox />
+              <PMLIconBox />
+              <PMLIconBox />
+            </PMLIcon>
           </PlaceMarkerList>
         ))}
       </PlaceList>
 
-      {(markerStateValue?.page.last ?? 0) > 1 && (
+      {(markerStateValue?.page.last ?? 0) > 1 && isListOpen && (
         <Pagination>
           <ul>
             {Array.from(
@@ -100,7 +121,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
               <PaginationNumber
                 key={"PaginationNumber" + pageNumber}
                 currentPage={pageNumber === markerStateValue?.page.current}
-                onClick={() => markerStateValue?.page.gotoPage(pageNumber)}
+                onClick={() => goToPage(pageNumber)}
               >
                 {pageNumber}
               </PaginationNumber>
