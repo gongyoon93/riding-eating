@@ -4,6 +4,7 @@ import { snackbarState } from "./atoms/snackbar";
 import { useEffect } from "react";
 import Routers from "./routes/Routers";
 import Snackbar from "./components/Snackbar/Snackbar";
+import PlaceModal from "./components/modal/PlaceModal";
 
 function App() {
   const { setUserState } = useSetUserState();
@@ -34,6 +35,7 @@ function App() {
         ))}
       </Snackbar>
       <Routers />
+      <PlaceModal />
     </>
   );
 }

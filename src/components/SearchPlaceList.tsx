@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { HTMLAttributes, useState } from "react";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import useSetUserState from "@/hooks/useSetUserState";
 import {
@@ -18,6 +18,7 @@ import {
 } from "@/styled/maps/MapSearchStyle";
 import useMaps from "@/hooks/useMaps";
 import { useNavigate } from "react-router-dom";
+import useSetModalState from "@/hooks/useSetModalState";
 
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
     setKeywordState,
     markerStateValue,
   } = useSetMapsState();
+  const { setPlaceModalState } = useSetModalState();
   const { setPositionPanTo, searchPlaces } = useMaps(map);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,6 +51,10 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const toggleSearchList = () => {
     setIsListOpen(!isListOpen);
     setIsBtnOpen(false);
+  };
+  const openPlaceModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    setPlaceModalState({ isOpen: true });
   };
 
   return (
@@ -101,7 +107,11 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
             <PMLIcon>
               <PMLIconBox />
               <PMLIconBox />
-              <PMLIconBox />
+              <PMLIconBox
+                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                  openPlaceModal(e)
+                }
+              />
             </PMLIcon>
           </PlaceMarkerList>
         ))}

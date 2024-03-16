@@ -157,13 +157,14 @@ function Map() {
       <SearchPlaceList map={map} />
       <StyledPoistionButton
         onClick={
-          addPlace
-          // getCurrentPosition(() =>
-          //   setPositionCenter(
-          //     positionStateValue.user.lat,
-          //     positionStateValue.user.lng
-          //   )
-          // )
+          // addPlace
+          () =>
+            getCurrentPosition(() =>
+              setPositionCenter(
+                positionStateValue.user.lat,
+                positionStateValue.user.lng
+              )
+            )
         }
       />
     </MapContainer>

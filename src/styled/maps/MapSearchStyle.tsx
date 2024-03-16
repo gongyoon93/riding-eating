@@ -5,6 +5,8 @@ import search from "@/assets/images/search.png";
 import double_right from "@/assets/images/double_right.png";
 import review from "@/assets/images/review.png";
 import visit from "@/assets/images/visit.png";
+import doubleArrowGreen from "@/assets/images/double_arrow_green.png";
+import doubleArrowWhite from "@/assets/images/double_arrow_white.png";
 
 export const SearchContainer = styled(({ ...parentsProps }) => (
   <FormContainer {...parentsProps} />
@@ -218,10 +220,11 @@ export const PMLIcon = styled.div`
   width: 65px;
   height: 100%;
   display: grid;
-  grid-template-rows: repeat(2, 1fr); /* 2개의 행을 생성 */
-  grid-template-columns: repeat(2, 1fr); /* 1개의 열을 생성 */
+  grid-template-rows: 25px;
+  grid-template-columns: repeat(2, 1fr);
   @media screen and (max-width: 768px) {
     width: 40px;
+    grid-template-rows: 16px;
   }
 `;
 
@@ -233,7 +236,18 @@ export const PMLIconBox = styled.div`
     background: url(${review}) center/20px 20px no-repeat;
   }
   &:nth-child(3) {
+    border: 2px solid ${({ theme }) => theme.color.second};
+    border-radius: 4px;
+    background:
+      url(${doubleArrowGreen}) center/26px 26px no-repeat,
+      linear-gradient(to right, #ffffff, #f0f0f0);
     grid-column: span 2;
+    margin: 7px 12px;
+    &:hover {
+      background:
+        url(${doubleArrowWhite}) center/26px 26px no-repeat,
+        linear-gradient(to left, #59ce8f, #83f298);
+    }
   }
   @media screen and (max-width: 768px) {
     &:first-child {
@@ -241,6 +255,18 @@ export const PMLIconBox = styled.div`
     }
     &:nth-child(2) {
       background: url(${review}) center/16px 16px no-repeat;
+    }
+    &:nth-child(3) {
+      border: 2px solid ${({ theme }) => theme.color.second};
+      background:
+        url(${doubleArrowGreen}) center/16px 16px no-repeat,
+        linear-gradient(to right, #ffffff, #f0f0f0);
+      margin: 14px 5px;
+      &:hover {
+        background:
+          url(${doubleArrowWhite}) center/16px 16px no-repeat,
+          linear-gradient(to left, #59ce8f, #83f298);
+      }
     }
   }
 `;
