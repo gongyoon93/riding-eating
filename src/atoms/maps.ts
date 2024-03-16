@@ -13,7 +13,7 @@ interface PositionState {
   };
 }
 
-interface MarkerData {
+export interface MarkerData {
   address_name: string;
   road_address_name: string;
   category_group_name: string;
