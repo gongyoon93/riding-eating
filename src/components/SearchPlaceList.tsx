@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useState } from "react";
+import React, { useState } from "react";
 import useSetMapsState from "@/hooks/useSetMapsState";
 import useSetUserState from "@/hooks/useSetUserState";
 import {
@@ -19,6 +19,7 @@ import {
 import useMaps from "@/hooks/useMaps";
 import { useNavigate } from "react-router-dom";
 import useSetModalState from "@/hooks/useSetModalState";
+import { MarkerData } from "@/atoms/maps";
 
 const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const navigate = useNavigate();
@@ -52,9 +53,12 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
     setIsListOpen(!isListOpen);
     setIsBtnOpen(false);
   };
-  const openPlaceModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const openPlaceModal = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    mark: MarkerData
+  ) => {
     e.stopPropagation();
-    setPlaceModalState({ isOpen: true });
+    setPlaceModalState({ isOpen: true, marker: mark });
   };
 
   return (
@@ -109,7 +113,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
               <PMLIconBox />
               <PMLIconBox
                 onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-                  openPlaceModal(e)
+                  openPlaceModal(e, mark)
                 }
               />
             </PMLIcon>

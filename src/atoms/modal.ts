@@ -1,8 +1,15 @@
 import { atom } from "recoil";
+import { MarkerData } from "./maps";
 
-export const placeModalState = atom<{ isOpen: boolean }>({
+interface PlaceModalState {
+  isOpen: boolean;
+  marker: MarkerData | null;
+}
+
+export const placeModalState = atom<PlaceModalState>({
   key: "placeModalState",
   default: {
     isOpen: false,
+    marker: null,
   },
 });

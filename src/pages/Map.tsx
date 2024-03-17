@@ -16,8 +16,9 @@ import {
   StyledPoistionButton,
   UserMarker,
 } from "@/styled/maps/MapDefaultStyle";
-import useFbMaps from "@/firebase/useFbMaps";
+import useModals from "@/hooks/useModals";
 import useSetUserState from "@/hooks/useSetUserState";
+import useSetModalState from "@/hooks/useSetModalState";
 
 function Map() {
   const [map, setMap] = useState<kakao.maps.Map>();
@@ -34,11 +35,12 @@ function Map() {
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
     libraries: ["clusterer", "services"],
   });
+  const { setPlaceModalState } = useSetModalState();
   // const {
   //   userStateValue: { uid },
   // } = useSetUserState();
   const { setPositionCenter, getCurrentPosition, searchPlaces } = useMaps(map);
-  const { getPlaceByUser, addPlaceByUser } = useFbMaps();
+  const { getPlaceByUser, addPlaceByUser } = useModals();
   // const { data } = getPlaceByUser(uid);
   // console.log(data);
   const { mutate: addPlaceMutate } = addPlaceByUser();
@@ -149,6 +151,7 @@ function Map() {
                 positionStateValue.map.lat === marker.lat &&
                 positionStateValue.map.lng === marker.lng
               }
+              onClick={() => setPlaceModalState({ isOpen: true, marker })}
             />
           </CustomOverlayMap>
         ))}

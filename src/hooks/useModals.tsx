@@ -1,4 +1,4 @@
-import { db } from "./fbInstance";
+import { db } from "../firebase/fbInstance";
 import {
   DocumentData,
   DocumentReference,
@@ -13,8 +13,13 @@ import {
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { MarkerData } from "@/atoms/maps";
+import useSetModalState from "./useSetModalState";
 
-const useFbMaps = () => {
+const useModals = () => {
+  const {
+    placeModalStateValue: { marker },
+  } = useSetModalState();
+  const date = new Date();
   const getPlaceByUser = (userId: string) => {
     return ReactQuery<QuerySnapshot<DocumentData>, AxiosError>({
       queryKey: ["user", userId],
@@ -50,7 +55,40 @@ const useFbMaps = () => {
       },
     });
   };
-  return { getPlaceByUser, addPlaceByUser };
+  const getReviewByPlace = (userId: string) => {
+    return ReactQuery<QuerySnapshot<DocumentData>, AxiosError>({
+      queryKey: ["user", userId],
+      queryFn: async () => await getDocs(collection(db, "places")),
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    });
+  };
+  const addReviewByPlace = (userId: string, text: string) => {
+    return ReactMutation<
+      DocumentReference<DocumentData>,
+      AxiosError,
+      MarkerData
+    >({
+      mutationFn: async () =>
+        await addDoc(
+          collection(db, `place/${marker?.id ?? 0}/user/${userId}/review`),
+          {
+            text,
+            createdAt: date.getTime(),
+            updatedAt: date.getTime(),
+            userId,
+            markerId: marker?.id ?? 0,
+          }
+        ),
+      onError: (error) => {
+        console.log(error);
+      },
+      onSuccess: (data: DocumentReference<DocumentData>) => {
+        console.log(data);
+      },
+    });
+  };
+  return { getPlaceByUser, addPlaceByUser, getReviewByPlace, addReviewByPlace };
 };
 
-export default useFbMaps;
+export default useModals;
