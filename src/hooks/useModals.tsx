@@ -6,6 +6,8 @@ import {
   addDoc,
   collection,
   getDocs,
+  orderBy,
+  query,
 } from "firebase/firestore";
 import {
   useMutation as ReactMutation,
@@ -15,9 +17,23 @@ import { AxiosError } from "axios";
 import { MarkerData } from "@/atoms/maps";
 import useSetModalState from "./useSetModalState";
 
+interface GetReviewVariable {
+  id: string;
+  userId?: string;
+  text?: string;
+  createdAt?: number;
+  updatedAt?: number;
+  markerId?: number | null;
+}
+
+interface AddReviewVariable {
+  userId: string;
+  text: string;
+}
+
 const useModals = () => {
   const {
-    placeModalStateValue: { marker },
+    placeModalStateValue: { isOpen, marker },
   } = useSetModalState();
   const date = new Date();
   const getPlaceByUser = (userId: string) => {
@@ -55,21 +71,35 @@ const useModals = () => {
       },
     });
   };
-  const getReviewByPlace = (userId: string) => {
-    return ReactQuery<QuerySnapshot<DocumentData>, AxiosError>({
-      queryKey: ["user", userId],
-      queryFn: async () => await getDocs(collection(db, "places")),
+  // 장소 별 리뷰 불러오기
+  const getReviewByPlace = () => {
+    const q = query(
+      collection(db, `place/${marker?.id ?? 0}/user`),
+      orderBy("createdAt", "desc")
+    );
+    return ReactQuery<GetReviewVariable[], AxiosError>({
+      queryKey: ["place", marker?.id ?? 0, "user"],
+      queryFn: async () => {
+        const snapshot = await getDocs(q);
+        const reviews = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        return reviews;
+      },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      enabled: !!isOpen,
     });
   };
-  const addReviewByPlace = (userId: string, text: string) => {
+  // 장소 별 리뷰 등록하기
+  const addReviewByPlace = () => {
     return ReactMutation<
       DocumentReference<DocumentData>,
       AxiosError,
-      MarkerData
+      AddReviewVariable
     >({
-      mutationFn: async () =>
+      mutationFn: async ({ userId, text }) =>
         await addDoc(
           collection(db, `place/${marker?.id ?? 0}/user/${userId}/review`),
           {

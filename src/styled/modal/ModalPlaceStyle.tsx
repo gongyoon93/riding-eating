@@ -60,6 +60,14 @@ export const PMUlN = styled.ul`
   }
   @media screen and (max-width: 768px) {
     height: 108px;
+    li {
+      font-size: 1.4em;
+      &:first-child {
+        padding-bottom: 10px;
+        height: 80px;
+        background: url(${fashong}) center/70px 70px no-repeat;
+      }
+    }
   }
 `;
 
@@ -87,8 +95,11 @@ export const PMUlY = styled.ul`
 export const PMContainer = styled(({ ...parentsProps }) => (
   <FormContainer {...parentsProps}></FormContainer>
 ))`
-  width: 100%;
-  height: 220px;
+  position: relative;
+  width: calc(100% - 4px);
+  height: 216px;
+  border: 2px solid ${({ theme }) => theme.color.second};
+  border-radius: 5px;
   @media screen and (max-width: 768px) {
     height: 108px;
   }
@@ -97,16 +108,61 @@ export const PMContainer = styled(({ ...parentsProps }) => (
 export const PMTextarea = styled(({ ...parentsProps }) => (
   <FormContainer.Textarea {...parentsProps}></FormContainer.Textarea>
 ))`
-  position: relative;
   outline: none;
   overflow: hidden;
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
-  padding: 20px 20px;
-  padding-bottom: 35px;
+  width: 100%;
+  height: calc(100% - 35px);
+  padding: 15px;
   font-weight: 500;
   font-size: 1.7em;
-  border: 2px solid ${({ theme }) => theme.color.second};
-  border-radius: 5px;
+  border: none;
   resize: none;
+  @media screen and (max-width: 768px) {
+    padding: 8px 8px;
+    height: calc(100% - 35px);
+    font-size: 1.3em;
+  }
+`;
+
+export const PMIpBtnY = styled.button`
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 50px;
+  height: 30px;
+  border: 2px solid ${({ theme }) => theme.color.second};
+  border-radius: 4px;
+  color: #ffffff;
+  background: linear-gradient(to left, #59ce8f, #83f298);
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 22px;
+    font-size: 1em;
+    font-weight: 600;
+  }
+`;
+
+export const PMIpBtnN = styled.button`
+  position: absolute;
+  bottom: 5px;
+  right: 60px;
+  width: 50px;
+  height: 30px;
+  border: 2px solid ${({ theme }) => theme.color.second};
+  border-radius: 4px;
+  color: ${({ theme }) => theme.color.second};
+  background: linear-gradient(to right, #ffffff, #f0f0f0);
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    right: 50px;
+    width: 40px;
+    height: 22px;
+    font-size: 1em;
+    font-weight: 600;
+  }
 `;

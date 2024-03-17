@@ -16,8 +16,6 @@ import {
   StyledPoistionButton,
   UserMarker,
 } from "@/styled/maps/MapDefaultStyle";
-import useModals from "@/hooks/useModals";
-import useSetUserState from "@/hooks/useSetUserState";
 import useSetModalState from "@/hooks/useSetModalState";
 
 function Map() {
@@ -31,33 +29,14 @@ function Map() {
     // watchStateValue: { watchId },
     // setWatchState,
   } = useSetMapsState();
+
+  const { setPlaceModalState } = useSetModalState();
+  const { setPositionCenter, getCurrentPosition, searchPlaces } = useMaps(map);
+
   const [loading, error] = useKakaoLoader({
     appkey: import.meta.env.VITE_MAPS_SCRIPT_KEY, // 발급 받은 APPKEY
     libraries: ["clusterer", "services"],
   });
-  const { setPlaceModalState } = useSetModalState();
-  // const {
-  //   userStateValue: { uid },
-  // } = useSetUserState();
-  const { setPositionCenter, getCurrentPosition, searchPlaces } = useMaps(map);
-  const { getPlaceByUser, addPlaceByUser } = useModals();
-  // const { data } = getPlaceByUser(uid);
-  // console.log(data);
-  const { mutate: addPlaceMutate } = addPlaceByUser();
-  const addPlace = () => {
-    addPlaceMutate({
-      address_name: "서울 성북구 길음2동 1163",
-      category_group_name: "병원",
-      category_name: "가정,생활 \u003e 반려동물 \u003e 동물병원",
-      id: 25448952,
-      phone: "02-984-0075",
-      place_name: "N동물의료센터 강북점",
-      place_url: "http://place.map.kakao.com/25448952",
-      road_address_name: "서울 성북구 삼양로4길 3",
-      lng: 127.024339606256,
-      lat: 37.6058059826405,
-    });
-  };
 
   useEffect(() => {
     // const watchState = localStorage.getItem("watchState");
@@ -159,15 +138,13 @@ function Map() {
       </MapView>
       <SearchPlaceList map={map} />
       <StyledPoistionButton
-        onClick={
-          // addPlace
-          () =>
-            getCurrentPosition(() =>
-              setPositionCenter(
-                positionStateValue.user.lat,
-                positionStateValue.user.lng
-              )
+        onClick={() =>
+          getCurrentPosition(() =>
+            setPositionCenter(
+              positionStateValue.user.lat,
+              positionStateValue.user.lng
             )
+          )
         }
       />
     </MapContainer>

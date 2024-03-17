@@ -10,12 +10,12 @@
 
 ## 기능 및 기술 설명
 
-- 웹앱 방향으로 계획 중
+- 반응형 디자인 적용
 - 기술 스택 : react + typescript + react-query + recoil + swc + vite + firebase + styled-components
 
 ### chapter 1 설정
 
-`vite.config.ts`를 수정 - [https://velog.io/@sik02/React-프로젝트-초기-세팅하기-React-TypeScript-Vite-ESLint-Prettier](https://velog.io/@sik02/React-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%B4%88%EA%B8%B0-%EC%84%B8%ED%8C%85%ED%95%98%EA%B8%B0-React-TypeScript-Vite-ESLint-Prettier) https://jforj.tistory.com/368
+`vite.config.ts`
 
 ```tsx
 import { defineConfig } from "vite";
@@ -31,7 +31,15 @@ export default defineConfig({
 
 ### chapter 2 폴더 구조 정리
 
-![riding-eating_폴더구조2](https://github.com/gongyoon93/riding-eating/assets/94844343/60472615-5f6f-418a-a981-6388d201d836)
+- 비지니스 로직 / View / 상태 관리 분리
+
+  - 아래와 같이 폴더 별로 분리
+
+  1. **hooks 폴더**: 추상화된 비즈니스 로직을 작성하는 곳. 핵심 기능 및 데이터 처리, 상태 관리를 담는 코드를 작성한다. 이 추상화된 로직(hooks)들은 재사용 컴포넌트와 page 컴포넌트에서 재사용 될 수 있다.
+  2. **components 폴더**: 재사용 가능한 UI 컴포넌트를 작성하는 곳. 비즈니스 로직을 포함하지 않으며, hooks 폴더에서 작성된 hooks에서 상태나 함수를 가져와 활용한다.
+  3. **pages 폴더**: 페이지 컴포넌트를 작성하는 곳. useEffect hook을 사용하여 페이지 진입 및 dependency에 따라 조건별 렌더링으로 필요한 작업을 수행한다. 필요에 따라 hooks를 가져와 사용한다.
+
+  - **components/Maps.tsx 와 pages/DashBoard.tsx로 분리하였지만 Maps.tsx가 재사용 UI가 아닌 Page 컴포넌트에 가깝고 useEffect hook으로 페이지 진입, dependency 의존해 작업 수행하는 코드 위주이므로 pages/Map.tsx로 변경, components의 파일도 필요에 따라 hooks를 가져와 사용할 수 있다는 점도 이해(24.03.08)**
 
 ### chapter 3 구현
 
@@ -79,16 +87,8 @@ export default defineConfig({
 - react -kakao-maps-sdk libarary : 기능 구현에 집중 할 수 있도록 KakaoMap과 React Life Cycle을 연결하여 제공, Component와 hook을 활용, Typescript의 타입 추론 > 사용 결정(24.03.06)
 - 현재 위치에 마커(커스텀 오버레이) 띄우기, useMaps와 useSetMapsState 정리, 기록 시작 event 함수 (24.03.07)
 - !Error Issue
+
   - **React does not recognize the `isMoving` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `ismoving` instead. If you accidentally passed it from a parent component, remove it from the DOM element. (24.03.07)**
-- 비지니스 로직 / View / 상태 관리 분리
-
-  - 아래와 같이 폴더 별로 분리
-
-  1. **hooks 폴더**: 비즈니스 로직을 작성하는 곳. 핵심 기능 및 데이터 처리, 상태 관리를 담는 코드를 작성한다. 이 추상화된 로직(hooks)들은 재사용 컴포넌트와 page 컴포넌트에서 재사용 될 수 있다.
-  2. **components 폴더**: 재사용 가능한 UI 요소들을 작성하고, props를 통해 데이터를 전달 받아 화면에 표시. 비즈니스 로직을 포함하지 않으며, hooks 폴더에서 작성된 hooks를 사용하여 데이터나 함수를 가져오거나 바인딩.
-  3. **pages 폴더**: 각 페이지에 대한 뷰와 페이지 전용의 useEffect hook을 사용하여 페이지 진입 및 dependency에 따라 필요한 작업을 수행할 수 있게 하는 곳. 필요에 따라 hooks를 가져와 사용한다.
-
-  - **components/Maps.tsx 와 pages/DashBoard.tsx로 분리하였지만 Maps.tsx가 재사용 UI가 아닌 Page 컴포넌트에 가깝고 useEffect hook으로 페이지 진입, dependency 의존해 작업 수행하는 코드 위주이므로 pages/Map.tsx로 변경, components의 파일도 필요에 따라 hooks를 가져와 사용할 수 있다는 점도 이해(24.03.08)**
 
 - watchPosition()은 클로저 개념을 이용해 (position) ⇒{ } 내부 함수에서 외부 변수인 watchId를 찾아서 접근하여 사용. (24.03.08)
 

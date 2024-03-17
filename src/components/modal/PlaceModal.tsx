@@ -5,28 +5,44 @@ import { useState } from "react";
 import {
   PMBtn,
   PMContainer,
+  PMIpBtnN,
+  PMIpBtnY,
   PMText,
   PMTextarea,
   PMTitle,
   PMUlN,
   PMUlY,
 } from "@/styled/modal/ModalPlaceStyle";
+import useSetUserState from "@/hooks/useSetUserState";
+import useModals from "@/hooks/useModals";
 
 const PlaceModal = () => {
   const [textInfo, setTextInfo] = useState({ isText: false, text: "" });
   const {
     placeModalStateValue: { isOpen, marker },
     setPlaceModalState,
-    addReviewByPlace,
   } = useSetModalState();
-  const addReview = (userId: string, text: string) => {
-    addReviewByPlace(userId, text);
+  const {
+    userStateValue: { uid },
+  } = useSetUserState();
+  const { getReviewByPlace, addReviewByPlace } = useModals();
+  const { isSuccess, data } = getReviewByPlace();
+  const { mutate: addReviewMutate } = addReviewByPlace();
+  const addReview = () => {
+    addReviewMutate({ userId: uid, text: textInfo.text });
     setTextInfo({ isText: false, text: "" });
   };
+  const closeModal = () => {
+    setTextInfo({ isText: false, text: "" });
+    setPlaceModalState({ isOpen: false, marker: null });
+  };
+  if (isSuccess) {
+    console.log(data);
+  }
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={() => setPlaceModalState({ isOpen: false, marker: null })}
+      onRequestClose={closeModal}
       style={customModalStyle}
       ariaHideApp={false}
       contentLabel="Place Modal"
@@ -55,7 +71,7 @@ const PlaceModal = () => {
           </PMBtn>
         )}
       </PMTitle>
-      {textInfo.isText ? (
+      {!textInfo.isText ? (
         <PMUlY>
           <li>좋아요</li>
           <li>쾌적합니다</li>
@@ -73,6 +89,15 @@ const PlaceModal = () => {
               setTextInfo((pre) => ({ ...pre, text: e.target.value }))
             }
           ></PMTextarea>
+          <PMIpBtnY type="button" onClick={addReview}>
+            등록
+          </PMIpBtnY>
+          <PMIpBtnN
+            type="button"
+            onClick={() => setTextInfo({ isText: false, text: "" })}
+          >
+            취소
+          </PMIpBtnN>
         </PMContainer>
       )}
     </Modal>
