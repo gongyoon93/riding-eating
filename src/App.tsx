@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Routers from "./routes/Routers";
 import Snackbar from "./components/Snackbar/Snackbar";
 import PlaceModal from "./components/modal/PlaceModal";
+import UserModal from "./components/modal/UserModal";
 
 function App() {
   const { setUserState } = useSetUserState();
@@ -36,6 +37,7 @@ function App() {
       </Snackbar>
       <Routers />
       <PlaceModal />
+      <UserModal />
     </>
   );
 }

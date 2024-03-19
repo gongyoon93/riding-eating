@@ -25,9 +25,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   const navigate = useNavigate();
   const [isBtnOpen, setIsBtnOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(true);
-  const {
-    userStateValue: { isLogin },
-  } = useSetUserState();
+  const { userStateValue } = useSetUserState();
   const {
     positionStateValue,
     setPositionState,
@@ -35,7 +33,8 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
     setKeywordState,
     markerStateValue,
   } = useSetMapsState();
-  const { setPlaceModalState } = useSetModalState();
+  const { setPlaceModalState, setUserModalState } = useSetModalState();
+
   const { setPositionPanTo, searchPlaces } = useMaps(map);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,6 +59,10 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
     e.stopPropagation();
     setPlaceModalState({ isOpen: true, marker: mark });
   };
+  const openUserModal = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
+    setUserModalState({ isOpen: true, user: userStateValue });
+  };
 
   return (
     <SearchContainer onSubmit={onSubmit} $isListOpen={isListOpen}>
@@ -73,7 +76,9 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
         />
         <SearchMoreIcon
           $isBtnOpen={isBtnOpen}
-          onClick={() => setIsBtnOpen(!isBtnOpen)}
+          onClick={() => {
+            setIsBtnOpen(!isBtnOpen);
+          }}
         />
         {isBtnOpen && (
           <SearchMoreSelect
@@ -83,8 +88,14 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
             <SearchMoreValue onClick={toggleSearchList}>
               {isListOpen ? "목록 닫기" : "목록 열기"}
             </SearchMoreValue>
-            <SearchMoreValue>나의 정보</SearchMoreValue>
-            {isLogin && (
+            <SearchMoreValue
+              onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) =>
+                openUserModal(e)
+              }
+            >
+              나의 정보
+            </SearchMoreValue>
+            {userStateValue.isLogin && (
               <SearchMoreValue onClick={() => navigate("/signout")}>
                 로그아웃
               </SearchMoreValue>
