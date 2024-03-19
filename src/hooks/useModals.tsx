@@ -12,30 +12,43 @@ import {
 import {
   useMutation as ReactMutation,
   useQuery as ReactQuery,
+  useQueryClient as ReactQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { MarkerData } from "@/atoms/maps";
 import useSetModalState from "./useSetModalState";
+import { useSetRecoilState } from "recoil";
+import { snackbarState } from "@/atoms/snackbar";
 
-interface GetReviewVariable {
+interface GetReviewData {
   id: string;
-  userId?: string;
-  text?: string;
-  createdAt?: number;
-  updatedAt?: number;
-  markerId?: number | null;
+  userId: string;
+  userName: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+  markerId: number | null;
 }
 
 interface AddReviewVariable {
   userId: string;
+  userName: string;
   text: string;
 }
 
 const useModals = () => {
+  const date = new Date();
+  const formattedDate = (date: number) => {
+    const newDate = new Date(date);
+    return `${newDate.getFullYear()}.${String(newDate.getMonth() + 1).padStart(2, "0")}.${String(newDate.getDate()).padStart(2, "0")} ${String(newDate.getHours()).padStart(2, "0")}:${String(newDate.getMinutes()).padStart(2, "0")}`;
+  };
+
+  const setSnackBar = useSetRecoilState(snackbarState);
+
   const {
     placeModalStateValue: { isOpen, marker },
   } = useSetModalState();
-  const date = new Date();
+
   const getPlaceByUser = (userId: string) => {
     return ReactQuery<QuerySnapshot<DocumentData>, AxiosError>({
       queryKey: ["user", userId],
@@ -73,48 +86,75 @@ const useModals = () => {
   };
   // 장소 별 리뷰 불러오기
   const getReviewByPlace = () => {
-    const q = query(
-      collection(db, `place/${marker?.id ?? 0}/user`),
-      orderBy("createdAt", "desc")
-    );
-    return ReactQuery<GetReviewVariable[], AxiosError>({
-      queryKey: ["place", marker?.id ?? 0, "user"],
+    return ReactQuery<GetReviewData[], AxiosError>({
+      queryKey: ["place", marker?.id ?? 0, "review"],
       queryFn: async () => {
-        const snapshot = await getDocs(q);
-        const reviews = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const snapshot = await getDocs(
+          query(
+            collection(db, `place/${marker?.id ?? 0}/review`),
+            orderBy("createdAt", "desc")
+          )
+        );
+        const reviews = snapshot.docs.map((doc) => {
+          return {
+            id: doc.id,
+            text: doc.data().text,
+            userId: doc.data().userId,
+            userName: doc.data().userName,
+            markerId: doc.data().markerId,
+            createdAt: doc.data().createdAt,
+            updatedAt: doc.data().updatedAt,
+          };
+        });
+        // console.log(reviews);
         return reviews;
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: !!isOpen,
+      enabled: !!isOpen && !!marker?.id,
     });
   };
   // 장소 별 리뷰 등록하기
   const addReviewByPlace = () => {
+    const queryClient = ReactQueryClient();
     return ReactMutation<
       DocumentReference<DocumentData>,
       AxiosError,
       AddReviewVariable
     >({
-      mutationFn: async ({ userId, text }) =>
-        await addDoc(
-          collection(db, `place/${marker?.id ?? 0}/user/${userId}/review`),
-          {
-            text,
-            createdAt: date.getTime(),
-            updatedAt: date.getTime(),
-            userId,
-            markerId: marker?.id ?? 0,
-          }
-        ),
+      mutationFn: async ({ userId, userName, text }) =>
+        await addDoc(collection(db, `place/${marker?.id ?? 0}/review`), {
+          text,
+          createdAt: formattedDate(date.getTime()),
+          updatedAt: formattedDate(date.getTime()),
+          userId,
+          userName,
+          markerId: marker?.id ?? 0,
+        }),
       onError: (error) => {
-        console.log(error);
+        if (error.response?.status === 400) {
+          setSnackBar((pre) => [
+            ...pre,
+            {
+              id: Date.now().toString(),
+              type: "warning",
+              message: "⛔️ 리뷰 등록에 실패하였어요.",
+            },
+          ]);
+        }
       },
-      onSuccess: (data: DocumentReference<DocumentData>) => {
-        console.log(data);
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["place", marker?.id ?? 0, "review"],
+        });
+        setSnackBar((pre) => [
+          ...pre,
+          {
+            id: Date.now().toString(),
+            type: "notice",
+            message: "✅ 리뷰가 등록되었어요.",
+          },
+        ]);
       },
     });
   };

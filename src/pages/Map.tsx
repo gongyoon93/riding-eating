@@ -110,7 +110,7 @@ function Map() {
           }}
           yAnchor={0.85}
         >
-          <UserMarker watchId={0} />
+          <UserMarker $watchId={0} />
         </CustomOverlayMap>
         {/* <MarkerClusterer
           averageCenter={true}
@@ -126,7 +126,7 @@ function Map() {
             // onClick={() => setInfo(marker)}
           >
             <PlaceMarker
-              isOver={
+              $isOver={
                 positionStateValue.map.lat === marker.lat &&
                 positionStateValue.map.lng === marker.lng
               }

@@ -91,6 +91,8 @@ export const customModalStyle: Styles = {
     boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.25)",
     backgroundColor: "white",
     justifyContent: "center",
-    overflow: "auto",
+    overflowY: "auto",
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
   },
 };

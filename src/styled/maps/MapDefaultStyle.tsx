@@ -58,26 +58,26 @@ const shakeAnimation = keyframes`
   100% { transform: translate(0, 0) rotate(0deg); }
 `;
 
-export const UserMarker = styled.div<{ watchId: number }>`
+export const UserMarker = styled.div<{ $watchId: number }>`
   font-size: 1.5em;
   width: 50px;
   height: 50px;
   border: none;
   background: ${(props) =>
-      props.watchId === 0 ? `url(${markerGreen})` : `url(${markerRed})`}
+      props.$watchId === 0 ? `url(${markerGreen})` : `url(${markerRed})`}
     transparent;
   color: #000;
   animation: ${blinkAnimation} 1s linear infinite;
 `;
 
-export const PlaceMarker = styled.div<{ isOver: boolean }>`
+export const PlaceMarker = styled.div<{ $isOver: boolean }>`
   font-size: 1.5em;
   width: 50px;
   height: 50px;
   border: none;
   background: url(${placeMarker_p}) center/50px 50px transparent;
-  animation: ${({ isOver }) =>
-    isOver
+  animation: ${({ $isOver }) =>
+    $isOver
       ? css`
           ${shakeAnimation} 1s linear infinite
         `

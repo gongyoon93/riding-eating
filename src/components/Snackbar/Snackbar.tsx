@@ -30,6 +30,7 @@ const snackbarTranslaterKeyframe = keyframes`
 `;
 
 const Container = styled.div`
+  z-index: 1034;
   position: fixed;
   bottom: 2rem;
   right: 1rem;

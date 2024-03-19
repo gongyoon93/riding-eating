@@ -10,7 +10,7 @@ import doubleArrowWhite from "@/assets/images/double_arrow_white.png";
 
 export const SearchContainer = styled(({ ...parentsProps }) => (
   <FormContainer {...parentsProps} />
-))<{ isListOpen: boolean }>`
+))<{ $isListOpen: boolean }>`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -18,9 +18,9 @@ export const SearchContainer = styled(({ ...parentsProps }) => (
   top: 3px;
   left: 3px;
   width: 350px;
-  min-height: ${({ isListOpen }) => (isListOpen ? "auto" : "60px")};
-  height: ${({ isListOpen }) => (isListOpen ? "auto" : "60px")};
-  max-height: ${({ isListOpen }) => (isListOpen ? "700px" : "60px")};
+  min-height: ${({ $isListOpen }) => ($isListOpen ? "auto" : "60px")};
+  height: ${({ $isListOpen }) => ($isListOpen ? "auto" : "60px")};
+  max-height: ${({ $isListOpen }) => ($isListOpen ? "700px" : "60px")};
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
@@ -34,13 +34,13 @@ export const SearchContainer = styled(({ ...parentsProps }) => (
   }
   @media screen and (max-width: 768px) {
     width: 180px;
-    min-height: ${({ isListOpen }) => (isListOpen ? "auto" : "45px")};
-    height: ${({ isListOpen }) => (isListOpen ? "auto" : "45px")};
-    max-height: ${({ isListOpen }) => (isListOpen ? "450px" : "45px")};
+    min-height: ${({ $isListOpen }) => ($isListOpen ? "auto" : "45px")};
+    height: ${({ $isListOpen }) => ($isListOpen ? "auto" : "45px")};
+    max-height: ${({ $isListOpen }) => ($isListOpen ? "450px" : "45px")};
   }
   @media screen and (min-width: 1281px) {
     width: 420px;
-    max-height: ${({ isListOpen }) => (isListOpen ? "820px" : "35px")};
+    max-height: ${({ $isListOpen }) => ($isListOpen ? "820px" : "35px")};
   }
 `;
 
@@ -79,14 +79,14 @@ export const SearchInput = styled(({ ...parentsProps }) => (
   }
 `;
 
-export const SearchMoreIcon = styled.div<{ isBtnOpen: boolean }>`
+export const SearchMoreIcon = styled.div<{ $isBtnOpen: boolean }>`
   flex-shrink: 0;
   width: 46px;
   height: 46px;
   border-radius: 10px;
   border: 2px solid ${({ theme }) => theme.color.second};
-  background: ${({ isBtnOpen }) =>
-    isBtnOpen
+  background: ${({ $isBtnOpen }) =>
+    $isBtnOpen
       ? `url(${double_right}) center/30px 30px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`
       : `url(${more_off}) center/30px 30px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`};
   transition: background-image 2s ease;
@@ -98,19 +98,19 @@ export const SearchMoreIcon = styled.div<{ isBtnOpen: boolean }>`
   @media screen and (max-width: 768px) {
     width: 31px;
     height: 31px;
-    background: ${({ isBtnOpen }) =>
-      isBtnOpen
+    background: ${({ $isBtnOpen }) =>
+      $isBtnOpen
         ? `url(${double_right}) center/20px 20px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`
         : `url(${more_off}) center/20px 20px no-repeat, linear-gradient(to right, #59ce8f, #83f298)`};
   }
 `;
 
-export const SearchMoreSelect = styled.ul<{ isBtnOpen: boolean }>`
+export const SearchMoreSelect = styled.ul<{ $isBtnOpen: boolean }>`
   position: absolute;
   right: -105px;
   top: 0;
-  display: ${({ isBtnOpen }) => (isBtnOpen ? "flex" : "none")};
-  opacity: ${({ isBtnOpen }) => (isBtnOpen ? "1" : "0")};
+  display: ${({ $isBtnOpen }) => ($isBtnOpen ? "flex" : "none")};
+  opacity: ${({ $isBtnOpen }) => ($isBtnOpen ? "1" : "0")};
   transition: opacity 0.3s ease-in-out;
   flex-direction: column;
   width: 100px;
@@ -138,7 +138,7 @@ export const SearchMoreValue = styled.li`
 `;
 
 export const PlaceList = styled.ul<{
-  hasMultiPage?: boolean;
+  $hasMultiPage?: boolean;
 }>`
   position: relative;
   width: 100%;
@@ -150,15 +150,15 @@ export const PlaceList = styled.ul<{
     display: none;
   }
   border: none;
-  border-radius: ${({ hasMultiPage }) =>
-    hasMultiPage ? "4px 4px 0 0" : "4px"};
-  box-shadow: ${({ hasMultiPage }) =>
-    hasMultiPage
+  border-radius: ${({ $hasMultiPage }) =>
+    $hasMultiPage ? "4px 4px 0 0" : "4px"};
+  box-shadow: ${({ $hasMultiPage }) =>
+    $hasMultiPage
       ? "none"
       : "0 2px 4px rgba(0, 0, 0, 0.2),0 -1px 0px rgba(0, 0, 0, 0.02)"};
 `;
 
-export const PlaceMarkerList = styled.li<{ isClick: boolean }>`
+export const PlaceMarkerList = styled.li<{ $isClick: boolean }>`
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -176,10 +176,10 @@ export const PlaceMarkerList = styled.li<{ isClick: boolean }>`
     border-color: ${({ theme }) => theme.color.second};
     background: linear-gradient(to top, #59ce8f, #83f298);
   }
-  border-color: ${({ isClick, theme }) =>
-    isClick ? theme.color.second : "transparent"};
-  background: ${({ isClick }) =>
-    isClick ? "linear-gradient(to top, #59ce8f, #83f298)" : "transparent"};
+  border-color: ${({ $isClick, theme }) =>
+    $isClick ? theme.color.second : "transparent"};
+  background: ${({ $isClick }) =>
+    $isClick ? "linear-gradient(to top, #59ce8f, #83f298)" : "transparent"};
   &:first-child {
     margin-top: 10px;
   }
@@ -292,7 +292,7 @@ export const Pagination = styled.div`
   }
 `;
 
-export const PaginationNumber = styled.li<{ currentPage: boolean }>`
+export const PaginationNumber = styled.li<{ $currentPage: boolean }>`
   cursor: pointer;
   width: 30px;
   height: 100%;
@@ -301,6 +301,6 @@ export const PaginationNumber = styled.li<{ currentPage: boolean }>`
   align-items: center;
   font-weight: 600;
   font-size: 13px;
-  color: ${({ currentPage, theme }) =>
-    currentPage ? theme.color.second : "inherit"};
+  color: ${({ $currentPage, theme }) =>
+    $currentPage ? theme.color.second : "inherit"};
 `;

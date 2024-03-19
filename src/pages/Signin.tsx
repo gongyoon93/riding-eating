@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import useSetUserState from "@/hooks/useSetUserState";
-import { useNavigate } from "react-router-dom";
-import useLogin from "@/hooks/useLogin";
 import FormContainer from "@/components/FormContainer";
 import useValidation from "@/hooks/useValidation";
 import {
@@ -13,6 +11,7 @@ import {
 } from "@/styled/form/FormDefaultStyle";
 import { ErrorLabel } from "@/styled/form/FormErrorStyle";
 import fashong from "@/assets/images/fashong.png";
+import useUsers from "@/hooks/useUsers";
 
 export default function SignIn() {
   const {
@@ -27,7 +26,7 @@ export default function SignIn() {
 
   const { setUserState } = useSetUserState();
 
-  const navigate = useNavigate();
+  const { useLogin } = useUsers();
 
   const { isSuccess, mutate: loginMutate } = useLogin();
 
@@ -43,11 +42,10 @@ export default function SignIn() {
     if (isSuccess) {
       timer = setTimeout(() => {
         setUserState((pre) => ({ ...pre, isLogin: true }));
-        navigate("/");
       }, 500);
     }
     return () => clearTimeout(timer);
-  }, [isSuccess, navigate, setUserState]);
+  }, [isSuccess]);
 
   return (
     <Wrapper>

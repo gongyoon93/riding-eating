@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   PMBtn,
   PMContainer,
+  PMCount,
   PMIpBtnN,
   PMIpBtnY,
   PMText,
@@ -23,22 +24,20 @@ const PlaceModal = () => {
     setPlaceModalState,
   } = useSetModalState();
   const {
-    userStateValue: { uid },
+    userStateValue: { uid, name },
   } = useSetUserState();
   const { getReviewByPlace, addReviewByPlace } = useModals();
-  const { isSuccess, data } = getReviewByPlace();
+  const { data: reveiws = [], isLoading } = getReviewByPlace();
   const { mutate: addReviewMutate } = addReviewByPlace();
   const addReview = () => {
-    addReviewMutate({ userId: uid, text: textInfo.text });
+    addReviewMutate({ userId: uid, userName: name ?? "", text: textInfo.text });
     setTextInfo({ isText: false, text: "" });
   };
   const closeModal = () => {
     setTextInfo({ isText: false, text: "" });
     setPlaceModalState({ isOpen: false, marker: null });
   };
-  if (isSuccess) {
-    console.log(data);
-  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -63,6 +62,7 @@ const PlaceModal = () => {
       </PMUlN>
       <PMTitle>
         리뷰 정보
+        <PMCount>{`(${reveiws.length} 건)`}</PMCount>
         {!textInfo.isText && (
           <PMBtn
             onClick={() => setTextInfo((pre) => ({ ...pre, isText: true }))}
@@ -72,16 +72,23 @@ const PlaceModal = () => {
         )}
       </PMTitle>
       {!textInfo.isText ? (
-        <PMUlY>
-          <li>좋아요</li>
-          <li>쾌적합니다</li>
-          <li>가성비가 좋네요</li>
-        </PMUlY>
+        !isLoading && reveiws.length > 0 ? (
+          <PMUlY>
+            {reveiws.map((review, idx) => (
+              <li key={`review-${review.markerId}-${review.userId}-${idx}`}>
+                <p>{review.userName}</p>
+                <p>{review.createdAt}</p>
+                <p>{review.text}</p>
+              </li>
+            ))}
+          </PMUlY>
+        ) : (
+          <PMUlN>
+            <li></li>
+            <li>리뷰 정보가 없습니다.</li>
+          </PMUlN>
+        )
       ) : (
-        // <PMUlN>
-        //   <li></li>
-        //   <li>리뷰 정보가 없습니다.</li>
-        // </PMUlN>
         <PMContainer>
           <PMTextarea
             value={textInfo.text}

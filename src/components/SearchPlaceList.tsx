@@ -62,7 +62,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
   };
 
   return (
-    <SearchContainer onSubmit={onSubmit} isListOpen={isListOpen}>
+    <SearchContainer onSubmit={onSubmit} $isListOpen={isListOpen}>
       <SearchHeader>
         <SearchInput
           placeholder="장소를 검색하세요."
@@ -72,12 +72,12 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
           }
         />
         <SearchMoreIcon
-          isBtnOpen={isBtnOpen}
+          $isBtnOpen={isBtnOpen}
           onClick={() => setIsBtnOpen(!isBtnOpen)}
         />
         {isBtnOpen && (
           <SearchMoreSelect
-            isBtnOpen={isBtnOpen}
+            $isBtnOpen={isBtnOpen}
             onMouseLeave={() => setIsBtnOpen(false)}
           >
             <SearchMoreValue onClick={toggleSearchList}>
@@ -93,12 +93,12 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
         )}
       </SearchHeader>
 
-      <PlaceList hasMultiPage={(markerStateValue?.page.last ?? 0) > 1}>
+      <PlaceList $hasMultiPage={(markerStateValue?.page.last ?? 0) > 1}>
         {markerStateValue?.marker.map((mark) => (
           <PlaceMarkerList
             key={`Place-Marker-List-${mark.id}`}
             onClick={() => setPositionPanTo(mark.lat, mark.lng)}
-            isClick={
+            $isClick={
               positionStateValue.map.lat === mark.lat &&
               positionStateValue.map.lng === mark.lng
             }
@@ -134,7 +134,7 @@ const SearchPlaceList = React.memo(({ map }: { map?: kakao.maps.Map }) => {
             ).map((pageNumber) => (
               <PaginationNumber
                 key={"PaginationNumber" + pageNumber}
-                currentPage={pageNumber === markerStateValue?.page.current}
+                $currentPage={pageNumber === markerStateValue?.page.current}
                 onClick={() => goToPage(pageNumber)}
               >
                 {pageNumber}

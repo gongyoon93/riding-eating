@@ -123,6 +123,7 @@ const setPositionCenter = useCallback(() => {
 - SearchPlaceList Style & function customization (24.03.13)
 - components 폴더의 component.tsx는 재사용 컴포넌트이며 hooks를 가져와 활용하고 이벤트 처리 함수 작성이나 상태 값 바인딩 등을 구현함에 따라서 styled-components로만 작성된 컴포넌트 형태는 styled 폴더 하위에 작성. (24.03.13)
 - 마커 클러스터링 적용할 경우 클러스터 마커 제외, 일부 일반 마커들에 느린 렌더링 현상(24.03.14)
+- styled-components DOM issue : props 이름을 “$props” 로 변경해서 해결
 
 ### chapter 4 배포
 
