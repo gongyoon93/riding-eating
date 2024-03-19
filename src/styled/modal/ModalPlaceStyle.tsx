@@ -23,7 +23,7 @@ export const PMCount = styled.span`
   color: ${({ theme }) => theme.color.second};
   font-size: 13px;
   font-weight: 700;
-  margin-top: 1px;
+  margin-top: 2px;
 `;
 
 export const PMBtn = styled.button`
