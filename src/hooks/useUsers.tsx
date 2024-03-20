@@ -62,7 +62,7 @@ const useUsers = () => {
   const updateProfile = () => {
     const auth = getAuth();
     if (auth.currentUser) {
-      setProfile(auth.currentUser, { displayName: "집사" });
+      setProfile(auth.currentUser, { displayName: "테스터" });
     }
   };
   return { useLogin, updateProfile };
