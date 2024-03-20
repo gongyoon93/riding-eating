@@ -72,7 +72,6 @@ const useModals = () => {
     return ReactQuery<GetReviewData[], AxiosError>({
       queryKey: ["reviewPlace", userId, marker?.id ?? 0],
       queryFn: async () => {
-        console.log("장소 리뷰 정보");
         const snapshot = await getDocs(
           query(
             collection(db, `placeReview`),
@@ -150,7 +149,6 @@ const useModals = () => {
     return ReactQuery<GetReviewData[], AxiosError>({
       queryKey: ["reviewPlace", userId, "All"],
       queryFn: async () => {
-        console.log("나의 리뷰 정보");
         const snapshot = await getDocs(
           query(
             collection(db, `placeReview`),
