@@ -19,11 +19,11 @@ export const PMTitle = styled.p`
 
 export const PMCount = styled.span`
   position: absolute;
-  left: 70px;
+  left: 105px;
   color: ${({ theme }) => theme.color.second};
   font-size: 13px;
   font-weight: 700;
-  margin-top: 2px;
+  margin-top: 1px;
 `;
 
 export const PMBtn = styled.button`
@@ -93,6 +93,7 @@ export const PMUlY = styled.ul`
   flex-direction: column;
   align-items: center;
   li {
+    position: relative;
     display: grid;
     grid-template-rows: 23px auto;
     grid-template-columns: auto 100px;
@@ -112,14 +113,18 @@ export const PMUlY = styled.ul`
         font-weight: 600;
         font-size: 1.4em;
         line-height: 23px;
+        width: calc(100% - 50px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       &:nth-child(2) {
-        width: 100px;
         line-height: 23px;
       }
-      &:nth-child(3) {
+      &:nth-child(4) {
         margin-top: 5px;
         grid-column: span 2;
+        width: calc(100% - 100px);
       }
     }
   }
@@ -131,18 +136,60 @@ export const PMUlY = styled.ul`
       p {
         font-size: 1.2em;
         &:first-child {
+          width: calc(100% - 30px);
           font-weight: 600;
           font-size: 1.3em;
         }
-        &:nth-child(2) {
-          width: 93px;
-        }
-        &:nth-child(3) {
-          margin-top: 5px;
-          grid-column: span 2;
+        &:nth-child(4) {
+          width: calc(100% - 55px);
         }
       }
     }
+  }
+`;
+
+export const PMUlYDBtn = styled.button`
+  cursor: pointer;
+  position: absolute;
+  right: 130px;
+  top: 11px;
+  background-color: transparent;
+  border: none;
+  margin-top: 2px;
+  padding: 0;
+  padding-bottom: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  border-bottom: 1px solid #000000;
+  &:hover {
+    border-bottom: 1px solid ${({ theme }) => theme.color.second};
+    color: ${({ theme }) => theme.color.second};
+  }
+  @media screen and (max-width: 768px) {
+    right: 117px;
+  }
+`;
+
+export const PMUlYUBtn = styled.button`
+  position: absolute;
+  bottom: 12px;
+  right: 20px;
+  width: 50px;
+  height: 22px;
+  border: 2px solid ${({ theme }) => theme.color.second};
+  border-radius: 4px;
+  color: #ffffff;
+  background: linear-gradient(to left, #59ce8f, #83f298);
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    right: 15px;
+    bottom: 7px;
+    width: 38px;
+    height: 22px;
+    font-size: 1em;
+    font-weight: 600;
   }
 `;
 

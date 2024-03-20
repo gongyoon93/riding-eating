@@ -32,3 +32,6 @@ dist-ssr
 
 # Ignore assets folder
 src/assets/
+
+# Ignore firebase
+.firebase

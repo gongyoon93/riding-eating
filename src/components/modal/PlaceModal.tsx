@@ -27,7 +27,7 @@ const PlaceModal = () => {
     userStateValue: { uid, name },
   } = useSetUserState();
   const { getReviewByPlace, addReviewByPlace } = useModals();
-  const { data: reveiws = [], isLoading } = getReviewByPlace();
+  const { data: placeReviews = [], isLoading } = getReviewByPlace(uid);
   const { mutate: addReviewMutate } = addReviewByPlace();
   const addReview = () => {
     addReviewMutate({ userId: uid, userName: name ?? "", text: textInfo.text });
@@ -62,7 +62,7 @@ const PlaceModal = () => {
       </PMUlN>
       <PMTitle>
         리뷰 정보
-        <PMCount>{`(${reveiws.length} 건)`}</PMCount>
+        <PMCount>{`(${placeReviews.length} 건)`}</PMCount>
         {!textInfo.isText && (
           <PMBtn
             onClick={() => setTextInfo((pre) => ({ ...pre, isText: true }))}
@@ -72,10 +72,12 @@ const PlaceModal = () => {
         )}
       </PMTitle>
       {!textInfo.isText ? (
-        !isLoading && reveiws.length > 0 ? (
+        !isLoading && placeReviews.length > 0 ? (
           <PMUlY>
-            {reveiws.map((review, idx) => (
-              <li key={`review-${review.markerId}-${review.userId}-${idx}`}>
+            {placeReviews.map((review) => (
+              <li
+                key={`reviewByMarker-${review.markerId}-${review.userId}-${review.id}`}
+              >
                 <p>{review.userName}</p>
                 <p>{review.createdAt}</p>
                 <p>{review.text}</p>

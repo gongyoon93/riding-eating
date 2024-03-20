@@ -3,7 +3,6 @@ import { customModalStyle } from "@/styled/style";
 import useSetModalState from "@/hooks/useSetModalState";
 import { useState } from "react";
 import {
-  PMBtn,
   PMContainer,
   PMCount,
   PMIpBtnN,
@@ -13,12 +12,18 @@ import {
   PMTitle,
   PMUlN,
   PMUlY,
+  PMUlYDBtn,
+  PMUlYUBtn,
 } from "@/styled/modal/ModalUserStyle";
 import useSetUserState from "@/hooks/useSetUserState";
 import useModals from "@/hooks/useModals";
 
 const UserModal = () => {
-  const [textInfo, setTextInfo] = useState({ isText: false, text: "" });
+  const [textInfo, setTextInfo] = useState({
+    isText: false,
+    text: "",
+    rId: "",
+  });
   const {
     userModalStateValue: { isOpen },
     setUserModalState,
@@ -26,15 +31,22 @@ const UserModal = () => {
   const {
     userStateValue: { uid, name, email },
   } = useSetUserState();
-  const { getReviewByPlace, addReviewByPlace } = useModals();
-  const { data: reveiws = [], isLoading } = getReviewByPlace();
-  const { mutate: addReviewMutate } = addReviewByPlace();
-  const addReview = () => {
-    addReviewMutate({ userId: uid, userName: name ?? "", text: textInfo.text });
-    setTextInfo({ isText: false, text: "" });
+  const { getReviewByUser, updateReviewByUser, deleteReviewByUser } =
+    useModals();
+  const { data: userReviews = [], isLoading } = getReviewByUser(uid);
+  const { mutate: updateReviewMutate } = updateReviewByUser();
+  const { mutate: deleteReviewMutate } = deleteReviewByUser();
+  const updateReview = () => {
+    const review = { reviewId: textInfo.rId, text: textInfo.text };
+    updateReviewMutate(review);
+    setTextInfo({ isText: false, text: "", rId: "" });
+  };
+  const deleteReview = (reviewId: string) => {
+    const review = { reviewId };
+    deleteReviewMutate(review);
   };
   const closeModal = () => {
-    setTextInfo({ isText: false, text: "" });
+    setTextInfo({ isText: false, text: "", rId: "" });
     setUserModalState({ isOpen: false, user: null });
   };
 
@@ -57,23 +69,32 @@ const UserModal = () => {
       </PMUlN>
       <PMTitle>
         나의 리뷰 정보
-        <PMCount>{`(${reveiws.length} 건)`}</PMCount>
-        {!textInfo.isText && (
-          <PMBtn
-            onClick={() => setTextInfo((pre) => ({ ...pre, isText: true }))}
-          >
-            리뷰 쓰기
-          </PMBtn>
-        )}
+        <PMCount>{`(${userReviews.length} 건)`}</PMCount>
       </PMTitle>
       {!textInfo.isText ? (
-        !isLoading && reveiws.length > 0 ? (
+        !isLoading && userReviews.length > 0 ? (
           <PMUlY>
-            {reveiws.map((review, idx) => (
-              <li key={`review-${review.markerId}-${review.userId}-${idx}`}>
-                <p>{review.userName}</p>
+            {userReviews.map((review) => (
+              <li
+                key={`reviewByUser-${review.markerId}-${review.userId}-${review.id}`}
+              >
+                <p>{review.markerName}</p>
                 <p>{review.createdAt}</p>
+                <PMUlYDBtn onClick={() => deleteReview(review.id)}>
+                  삭제
+                </PMUlYDBtn>
                 <p>{review.text}</p>
+                <PMUlYUBtn
+                  onClick={() =>
+                    setTextInfo({
+                      isText: true,
+                      text: review.text,
+                      rId: review.id,
+                    })
+                  }
+                >
+                  수정
+                </PMUlYUBtn>
               </li>
             ))}
           </PMUlY>
@@ -91,12 +112,12 @@ const UserModal = () => {
               setTextInfo((pre) => ({ ...pre, text: e.target.value }))
             }
           ></PMTextarea>
-          <PMIpBtnY type="button" onClick={addReview}>
-            등록
+          <PMIpBtnY type="button" onClick={updateReview}>
+            적용
           </PMIpBtnY>
           <PMIpBtnN
             type="button"
-            onClick={() => setTextInfo({ isText: false, text: "" })}
+            onClick={() => setTextInfo({ isText: false, text: "", rId: "" })}
           >
             취소
           </PMIpBtnN>

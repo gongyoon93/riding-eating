@@ -23,7 +23,7 @@ export const PMCount = styled.span`
   color: ${({ theme }) => theme.color.second};
   font-size: 13px;
   font-weight: 700;
-  margin-top: 2px;
+  margin-top: 1px;
 `;
 
 export const PMBtn = styled.button`
@@ -112,6 +112,9 @@ export const PMUlY = styled.ul`
         font-weight: 600;
         font-size: 1.4em;
         line-height: 23px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       &:nth-child(2) {
         width: 100px;
