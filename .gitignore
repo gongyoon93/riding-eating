@@ -34,4 +34,4 @@ dist-ssr
 src/assets/
 
 # Ignore firebase
-.firebase
+.firebase/
