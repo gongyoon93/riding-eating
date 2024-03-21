@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useSetUserState from "@/hooks/useSetUserState";
+// import useSetUserState from "@/hooks/useSetUserState";
 import styled from "styled-components";
 
 const Wrapper = styled.header`
@@ -45,9 +45,9 @@ const LogContainer = styled.div`
 `;
 
 const Header = () => {
-  const {
-    userStateValue: { isLogin },
-  } = useSetUserState();
+  // const {
+  //   userStateValue: { isLogin },
+  // } = useSetUserState();
 
   return (
     <Wrapper>
@@ -63,11 +63,11 @@ const Header = () => {
               <Link to="/signout">로그아웃</Link>
             </li>
           )} */}
-          {!isLogin && (
+          {/* {!isLogin && (
             <li>
               <Link to="/auth/signup">회원가입</Link>
             </li>
-          )}
+          )} */}
         </ul>
       </nav>
     </Wrapper>
