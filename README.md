@@ -46,7 +46,7 @@ export default defineConfig({
 
   - react - hook - form 라이브러리 없이 formData 관리 및 유효성 검사 구현
 
-- firebase authentication의 auth uid 값을 localStorage에 저장
+- firebase authentication의 auth uid 값을 localStorage에 저장 > auth api로 유효 검증 예정
 
 - 메인 기능의 구현 계획(24.03.06)
 
