@@ -113,6 +113,6 @@ const setPositionCenter = useCallback(() => {
 
 1. LocalStorage 사용자 정보의 uid만으로 데이터를 제한, 보안성 유지하며 사용자 정보 fecth api로 사용자의 session 확인
 2. useQuery 종속 쿼리와 캐싱간의 장점을 살려 fecth hook 수정
-3. 클러스터 렌더링 최적화
+3. 클러스터 렌더링 최적화 (react-kakao-maps library의 성능 이슈로 확인되어 자체 클러스터 렌더링 방법 고려중)
 4. 방문 정보를 목록화 하지 않고 방문유무로 판별하여 기능 작업
 5. 길찾기 기능
