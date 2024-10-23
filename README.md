@@ -101,11 +101,11 @@ const setPositionCenter = useCallback(() => {
 
 ### chapter 4 배포
 
-23.03.29 배포 이후 버전별 배포 예정
+24.03.29 배포 이후 버전별 배포 예정
 
 ### chapter 5 운영
 
-23.03.29 배포 이후 버전별 배포 예정
+24.03.29 배포 이후 버전별 배포 예정
 
 ### chapter 리팩토링
 
