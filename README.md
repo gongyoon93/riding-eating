@@ -7,7 +7,10 @@
 3. 각 장소의 정보에 사용자들이 리뷰를 공유
 4. 마이 페이지 - 나의 정보, 방문 정보 목록, 리뷰 정보 수정/삭제
 
+
+
 ## 기능 및 기술 설명
+![RidingEating_architecture_capture](https://github.com/user-attachments/assets/12535393-c13e-4a39-83e7-3b71c845ae5d)
 
 - 반응형 디자인 적용
 - 기술 스택 : react + typescript + react-query + recoil + swc + vite + firebase + styled-components
